@@ -15,7 +15,7 @@
     module.exports = sequelize
 
     //databases
-    const Usuario = require('./models/Usuario')
+    const Usuario = require('./models/Usuarios')
 
 
     await sequelize.sync({

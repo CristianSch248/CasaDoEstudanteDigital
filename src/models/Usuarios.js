@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const sequelize = require('../connectionDB')
+const sequelize = require('../loadDatabase')
 
 const Usuario = sequelize.define('usuario', {
     id: {
@@ -17,9 +17,23 @@ const Usuario = sequelize.define('usuario', {
     senha: {
         type: Sequelize.STRING
     },
-    //ativo
-    //matricula
-    //telefone
+    tipo: {
+        type: Sequelize.STRING
+        /**
+            aluno
+            prae
+            manutenção
+         */
+    },
+    matricula: {
+        type: Sequelize.STRING
+    },
+    telefone: {
+        type: Sequelize.STRING
+    },
+    ativo: {
+        type: Sequelize.BOOLEAN
+    }
 })
 
 console.log('Carregou [Usuario.js]')
