@@ -19,8 +19,7 @@ async function validateAttributes(attributes) {
 }
 
 /**
- * Retorna um array ou um objeto de registros.
- * @param { Boolean } all true retorna um array, false retorna um objeto.
+ * Retorna um array de registros.
  * @param { Array<String> } attributes Atributos da model.
  * @param { WhereOptions } filters Filtros da busca.
  * @returns { Model } Usuarios
@@ -41,6 +40,12 @@ async function findAll(attributes, filters) {
 	return Usuarios
 }
 
+/**
+ * Retorna um objeto de registros.
+ * @param { Array<String> } attributes Atributos da model.
+ * @param { WhereOptions } filters Filtros da busca.
+ * @returns { Model } Usuarios
+ */
 async function findOne(attributes, filters) {
 	let atributosValidados = await validateAttributes(attributes)
 	if (atributosValidados.length === 0) {
@@ -72,6 +77,8 @@ async function create(Usuario, transaction) {
 
 	let atributosValidados = await validateAttributes(attributes)
 	if (attributes.length != atributosValidados.length) return null
+
+	// verificar se o usuario já existe
 
 	let UsuarioCriado = await ModelUsuarios.create(Usuario, { transaction: transaction })
 

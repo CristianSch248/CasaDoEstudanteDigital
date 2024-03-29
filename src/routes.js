@@ -4,13 +4,6 @@ const routes  = express.Router()
 //ROTAS
 rotaUsuario = require('./routes/Usuarios')
 
-
-
-
-routes.use(rotaUsuario)
-
-
-
-
+routes.use('/api/ced', rotaUsuario)
 
 module.exports = routes;

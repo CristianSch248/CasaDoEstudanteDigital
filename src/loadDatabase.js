@@ -15,8 +15,11 @@
     module.exports = sequelize
 
     //databases
+    const Apartamentos = require('./models/Apartamentos')
+    const Patrimonio = require('./models/Patrimonios')
     const Usuario = require('./models/Usuarios')
-
+    const Vistorias = require('./models/Vistorias')
+    const Manutencoes = require('./models/Manutencoes')
 
     await sequelize.sync({
         force: false, 

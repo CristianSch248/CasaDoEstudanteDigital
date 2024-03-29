@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../loadDatabase')
+const Usuario = require('../models/Usuarios')
+const Apartamentos = require('../models/Apartamentos')
 
 const Vistorias = sequelize.define('vistorias', {
     id: {
@@ -8,23 +10,38 @@ const Vistorias = sequelize.define('vistorias', {
         autoIncrement: true
     },
     id_aluno: {
-
+        type: Sequelize.INTEGER,
+        onDelete: 'cascade',
+        references: {
+            model: Usuario.schema('public'),
+            key: 'id'
+        },
     },
     id_usuario_confirmador: {
-
+        type: Sequelize.INTEGER,
+        onDelete: 'cascade',
+        references: {
+            model: Usuario.schema('public'),
+            key: 'id'
+        },
     },
     id_apartamento: {
-
+        type: Sequelize.INTEGER,
+        onDelete: 'cascade',
+        references: {
+            model: Apartamentos.schema('public'),
+            key: 'id'
+        },
     },
     dt_vistoria: {
-
+       type: Sequelize.DATEONLY 
     },
     status: {
-
+        type: Sequelize.INTEGER,
     },
     Observacoes:{
-        
-    }
+        type: Sequelize.STRING,
+    },
 })
 
 console.log('Carregou [Vistorias.js]')

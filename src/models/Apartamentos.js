@@ -8,13 +8,14 @@ const Apartamento = sequelize.define('apartamento', {
         autoIncrement: true
     },
     numero: {
-
+        type: Sequelize.BIGINT
     },
     bloco: {
-
+        type: Sequelize.BIGINT
     },
-    Vagas: {
-
+    vagas: {
+        type: Sequelize.INTEGER,
+        defaultValue: 8
     }
 })
 

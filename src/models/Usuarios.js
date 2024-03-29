@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../loadDatabase')
+const Apartamentos = require('../models/Apartamentos')
 
 const Usuario = sequelize.define('usuario', {
     id: {
@@ -18,11 +19,11 @@ const Usuario = sequelize.define('usuario', {
         type: Sequelize.STRING
     },
     tipo: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
         /**
-            aluno
-            prae
-            manutenção
+            1 - aluno
+            2 - prae
+            3 - manutenção
          */
     },
     matricula: {
@@ -33,6 +34,14 @@ const Usuario = sequelize.define('usuario', {
     },
     ativo: {
         type: Sequelize.BOOLEAN
+    },
+    id_apartamento: { // null se for PRAE ou MANUTENÇÂO
+        type: Sequelize.INTEGER,
+        onDelete: 'cascade',
+        references: {
+            model: Apartamentos.schema('public'),
+            key: 'id'
+        },
     }
 })
 

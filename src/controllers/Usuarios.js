@@ -4,7 +4,6 @@ const { sendResponse } = require('../js/Utils')
 async function novoUsuario(req, res){
     try {
         let body = req.body
-        
         const result = await Usuarios.novoUsuario(body)
         sendResponse(res, result)
     } catch (error){
@@ -15,7 +14,7 @@ async function novoUsuario(req, res){
 
 async function listarUsuarios(req, res){
     try {        
-        const result = await Usuarios.listarUsuarios()
+        const result = await Usuarios.listarUsuarios(req.params.tipo)
         sendResponse(res, result)
     } catch (error) {
         console.log("🚀 ~ listarUsuarios ~ error:", error)
@@ -24,65 +23,42 @@ async function listarUsuarios(req, res){
 }
 
 async function alterarUsuario(req, res){
-    let id = req.params.id
-    let body = req.body
-    
-    if (!id){
-        console.log("Usuário não informado")
-        return
-    }
-
-    const t = await sequelize.transaction()
-
     try{
-        let Usuario = await ModelUsuario.findOne({
-            where: {
-                id: id
-            }
-        })
-    
-        if(body.nome){
-            Usuario.nome = body.nome
-        }
-        if(body.email){
-            Usuario.email = body.email
-        }
-        if(body.senha){
-            Usuario.senha = await bcrypt.hash(body.senha, 10)
-        }
-    
-        await Usuario.save({transaction: t})
-        await t.commit()
-        console.log('Usuario alterado com sucesso')
-        return res.status(200).send('Usuário alterado com sucesso')
+        let id = req.params.id
+        let body = req.body
+        const result = await Usuarios.alterarUsuario(id, body)
+        sendResponse(res, result)
     } catch (error){
-        console.log("🚀 error:", error)
-        await t.rollback()
+        console.log("alterarUsuario ~ error:", error)
         return res.status(400).send('Erro ao editar o usuário')
     }
 }
 
 async function alterarSenhaUsuario(req, res){
     try {
-        
+        const result = await Usuarios.alterarSenhaUsuario(req.params.id, req.body)
+        sendResponse(res, result)
     } catch (error) {
-        console.log("🚀 ~ alterarSenhaUsuario ~ error:", error)
-        
+        console.log("alterarSenhaUsuario ~ error:", error)
+        return res.status(400).send('Erro ao alterra a senha do usuário')
     }
 }
 
 async function desativarUsuario(req, res){
     try {
-        
+        const result = await Usuarios.desativarUsuario(req.params.id)
+        sendResponse(res, result)
     } catch (error) {
-        console.log("🚀 ~ desativarUsuario ~ error:", error)
-        
+        console.log("desativarUsuario ~ error:", error)
+        return res.status(400).send('Erro ao desativar usuário')
     }
 }
 
 async function login(req, res){
     try {
-        
+        let body = req.body
+        const result = await Usuarios.login(body)
+        sendResponse(res, result)
     } catch (error) {
         console.log("🚀 ~ login ~ error:", error)
         return res.status(400).send('E-mail ou Senha incorretos.')
@@ -91,10 +67,12 @@ async function login(req, res){
 
 async function logout(req, res){
     try {
-        
+        let Token = req.headers['x-access-token']
+        const result = await Usuarios.logout(Token)
+        sendResponse(res, result)
     } catch (error) {
         console.log("🚀 ~ logout ~ error:", error)
-        
+        return res.status(400).send('Erro no logout')
     }
 }
 
