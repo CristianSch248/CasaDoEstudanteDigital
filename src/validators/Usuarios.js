@@ -36,7 +36,7 @@ exports.novoUsuario = [
 	},
 ]
 
-exports.listarUsuariosAlunos = [
+exports.listarUsuarios = [
 	async (req, res, next) => {
 		if (!req.params.tipo) return console.log("Tipo de usuário não informado")
 		const errors = await validationResult(req)

@@ -20,6 +20,7 @@
     const Usuario = require('./models/Usuarios')
     const Vistorias = require('./models/Vistorias')
     const Manutencoes = require('./models/Manutencoes')
+    const Vaga = require('./models/Vagas')
 
     await sequelize.sync({
         force: false, 
