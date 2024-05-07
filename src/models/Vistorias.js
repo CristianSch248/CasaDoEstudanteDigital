@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../loadDatabase')
-const Usuario = require('../models/Usuarios')
-const Apartamentos = require('../models/Apartamentos')
+const Usuario = require('./Usuarios')
+const Apartamentos = require('./Apartamentos')
 
 const Vistorias = sequelize.define('vistorias', {
     id: {

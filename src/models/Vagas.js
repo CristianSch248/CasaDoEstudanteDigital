@@ -25,7 +25,7 @@ const Vaga = sequelize.define('vaga', {
         type: Sequelize.INTEGER,
         onDelete: 'cascade',
         references: {
-            model: Usuarios,
+            model: Usuarios.schema('public'),
             key: 'id'
         },
     },
@@ -33,7 +33,7 @@ const Vaga = sequelize.define('vaga', {
         type: Sequelize.INTEGER,
         onDelete: 'cascade',
         references: {
-            model: Apartamentos,
+            model: Apartamentos.schema('public'),
             key: 'id'
         },
     }
