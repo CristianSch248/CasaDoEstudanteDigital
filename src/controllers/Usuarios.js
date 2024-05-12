@@ -17,16 +17,15 @@ async function listarUsuarios(req, res){
         const result = await Usuarios.listarUsuarios(req.query.tipo)
         sendResponse(res, result)
     } catch (error) {
-        console.log("🚀 ~ listarUsuarios ~ error:", error)
+        console.log("listarUsuarios ~ error:", error)
         return res.status(400).send('Erro ao buscar usuários.')
     }
 }
 
 async function alterarUsuario(req, res){
     try{
-        let id = req.params.id
         let body = req.body
-        const result = await Usuarios.alterarUsuario(id, body)
+        const result = await Usuarios.alterarUsuario(body)
         sendResponse(res, result)
     } catch (error){
         console.log("alterarUsuario ~ error:", error)
@@ -36,7 +35,7 @@ async function alterarUsuario(req, res){
 
 async function alterarSenhaUsuario(req, res){
     try {
-        const result = await Usuarios.alterarSenhaUsuario(req.params.id, req.body)
+        const result = await Usuarios.alterarSenhaUsuario(req.body)
         sendResponse(res, result)
     } catch (error) {
         console.log("alterarSenhaUsuario ~ error:", error)
@@ -46,7 +45,7 @@ async function alterarSenhaUsuario(req, res){
 
 async function desativarUsuario(req, res){
     try {
-        const result = await Usuarios.desativarUsuario(req.params.id)
+        const result = await Usuarios.desativarUsuario(req.body.id)
         sendResponse(res, result)
     } catch (error) {
         console.log("desativarUsuario ~ error:", error)
@@ -60,7 +59,7 @@ async function login(req, res){
         const result = await Usuarios.login(body)
         sendResponse(res, result)
     } catch (error) {
-        console.log("🚀 ~ login ~ error:", error)
+        console.log("login ~ error:", error)
         return res.status(400).send('E-mail ou Senha incorretos.')
     }
 }
@@ -71,7 +70,7 @@ async function logout(req, res){
         const result = await Usuarios.logout(Token)
         sendResponse(res, result)
     } catch (error) {
-        console.log("🚀 ~ logout ~ error:", error)
+        console.log("logout ~ error:", error)
         return res.status(400).send('Erro no logout')
     }
 }

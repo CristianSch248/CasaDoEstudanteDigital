@@ -46,8 +46,14 @@ exports.listarUsuarios = [
 ]
 
 exports.alterarUsuario = [	
+
+	check('id')
+		.not()
+		.isEmpty()
+		.withMessage('Usuário não informado')
+		.bail(),
+
 	async (req, res, next) => {
-		if (!req.params.id) return console.log("Usuário não informado")
 		const errors = await validationResult(req)
 		if (!errors.isEmpty()) return res.status(400).send(errors.array()[0].msg)		
 		next()
@@ -65,7 +71,6 @@ exports.alterarSenhaUsuario = [
 		.bail(),
 	
 	async (req, res, next) => {
-		if (!req.params.id) return console.log("Usuário não informado")
 		const errors = await validationResult(req)
 		if (!errors.isEmpty()) return res.status(400).send(errors.array()[0].msg)		
 		next()
@@ -73,8 +78,13 @@ exports.alterarSenhaUsuario = [
 ]
 
 exports.desativarUsuario = [
+	check('id')
+		.not()
+		.isEmpty()
+		.withMessage('Usuário não informado')
+		.bail(),
+
 	async (req, res, next) => {
-		if (!req.params.id) return console.log("Usuário não informado")
 		const errors = await validationResult(req)
 		if (!errors.isEmpty()) return res.status(400).send(errors.array()[0].msg)		
 		next()

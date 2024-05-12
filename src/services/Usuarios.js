@@ -25,7 +25,7 @@ async function novoUsuario(body){
 
 		return { success: true, message: 'Usuário cadastrado com sucesso!'}
     } catch (error){
-        console.log("🚀 error:", error)
+        console.log("novoUsuario ~ error:", error)
         await t.rollback()
         return { success: false, message: 'Erro ao criar o usuário!'}
     }
@@ -41,11 +41,11 @@ async function listarUsuarios(tipo){
     }
 }
 
-async function alterarUsuario(id, body){
+async function alterarUsuario(body){
     const t = await sequelize.transaction()
 
     try{
-        let Usuario = await Usuarios.findOne([], [{ where: { id : id } }])
+        let Usuario = await Usuarios.findOne([], [{ id : body.id }])
     
         if(body.nome) Usuario.nome = body.nome
         if(body.email) Usuario.email = body.email
@@ -57,31 +57,31 @@ async function alterarUsuario(id, body){
         
         return { success: true, message: Usuario } 
     } catch (error){
-        console.log("🚀 error:", error)
+        console.log("alterarUsuario ~ error:", error)
         await t.rollback()
         return { succes: false, message: 'Erro ao editar o usuário'}
     }
 }
 
-async function alterarSenhaUsuario(id, body){
+async function alterarSenhaUsuario(body){
     const t = await sequelize.transaction()
     
     try {
-        let Usuario = await Usuarios.findOne(['senha'], [{ where: { id : id } }])
+        let user = await Usuarios.findOne(['id', 'senha'], [{ email: body.email }, { id : body.id }])
 
-        const match = await bcrypt.compare(body.senha, Usuario.senha)
+        const match = await bcrypt.compare(body.senha, user.senha)
         if (match) {
             await t.rollback()
             return { succes: false, message: 'As senhas são iguais, defina uma senha diferente.'}    
         }
+        
+        user.senha = await bcrypt.hash(body.senha, 10)
 
-        Usuario.senha = await bcrypt.hash(body.senha, 10)
-
-        await Usuario.save({ transaction: t })
+        await user.save({ transaction: t })
         await t.commit()
         return { succes: false, message: 'Senha alterada com sucesso.'}
     } catch (error) {
-        console.log("🚀 ~ alterarSenhaUsuario ~ error:", error)
+        console.log("alterarSenhaUsuario ~ error:", error)
         await t.rollback()
         return { succes: false, message: 'Erro ao alterar a senha.'}
     }
@@ -91,15 +91,15 @@ async function desativarUsuario(id){
     const t = await sequelize.transaction()
     
     try {
-        let Usuario = await Usuarios.findOne(['ativo'], [{ where: { id : id } }])
-        
-        Usuario.ativo = false
+        let user = await Usuarios.findOne(['id', 'ativo'], [{ id : id }])
 
-        await Usuario.save({ transaction: t })
+        user.ativo = false
+
+        await user.save({ transaction: t })
         await t.commit()
         return { succes: false, message: 'Usuário desativado com sucesso.'}
     } catch (error) {
-        console.log("🚀 ~ alterarSenhaUsuario ~ error:", error)
+        console.log("alterarSenhaUsuario ~ error:", error)
         await t.rollback()
         return { succes: false, message: 'Erro ao desativar usuário.'}
     }

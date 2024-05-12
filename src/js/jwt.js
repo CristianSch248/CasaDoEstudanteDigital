@@ -24,7 +24,7 @@ function verifyJWT(req, res, next){
         req.id = decodedToken
         next()
     } catch (error) {
-        console.log("🚀 ~ jwt.verify ~ err:", error)
+        console.log("jwt.verify ~ err:", error)
         res.status(401).json({ message: 'Token inválido' });
     }
 }
@@ -52,7 +52,7 @@ function verifyPermissionAluno(req, res, next){
         if(req.tipo !== 1) return res.status(403).json({ message: 'Usuario sem autorização!' })
         next()
     } catch (error) {
-        console.log("🚀 ~ jwt.verify ~ err:", error)
+        console.log("jwt.verify ~ err:", error)
         res.status(401).json({ message: 'Token inválido' })
     }
 }
@@ -70,7 +70,7 @@ function verifyPermissionPrae(req, res, next){
         if(req.tipo !== 2) return res.status(403).json({ message: 'Usuario sem autorização!' })
         next()
     } catch (error) {
-        console.log("🚀 ~ jwt.verify ~ err:", error)
+        console.log("jwt.verify ~ err:", error)
         res.status(401).json({ message: 'Token inválido' })
     }
 }
@@ -88,7 +88,7 @@ function verifyPermissionManutencao(req, res, next){
         if(req.tipo !== 3) return res.status(403).json({ message: 'Usuario sem autorização!' })
         next()
     } catch (error) {
-        console.log("🚀 ~ jwt.verify ~ err:", error)
+        console.log("jwt.verify ~ err:", error)
         res.status(401).json({ message: 'Token inválido' })
     }
 }
