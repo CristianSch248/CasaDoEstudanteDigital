@@ -14,7 +14,7 @@ async function novoUsuario(req, res){
 
 async function listarUsuarios(req, res){
     try {        
-        const result = await Usuarios.listarUsuarios(req.params.tipo)
+        const result = await Usuarios.listarUsuarios(req.query.tipo)
         sendResponse(res, result)
     } catch (error) {
         console.log("🚀 ~ listarUsuarios ~ error:", error)

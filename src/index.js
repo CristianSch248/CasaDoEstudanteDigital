@@ -6,15 +6,10 @@ const bodyParser = require('body-parser')
 const swaggerJsdoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express')
 
+const swaggerDefinition = require('./js/SwaggerDocs.json')
+
 const options = {
-    definition: {
-        openapi: '3.0.0',
-        info: {
-            title: 'API API CED',
-            version: '1.0.1',
-            description: 'API do CED'
-        },
-    },
+    definition: swaggerDefinition,
     apis: ['./src/routes/*.js']
 }
 

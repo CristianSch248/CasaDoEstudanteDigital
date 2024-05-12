@@ -1,0 +1,5596 @@
+{
+	"openapi": "3.0.1",
+	"info": {
+		"title": "AVMB Diploma Digital",
+		"description": "<!--------------------------------------------------------------------------------------------------------------------->\r\n\r\n<h2>Introdução</h2>\r\n\r\n<p>\r\n\tEsta aplicação permite a criação, validação e envio para assinatura de diplomas digitais de acordo com os requisitos publicados na portaria MEC nº 554/2019.\r\n</p>\r\n\r\n<br />",
+		"version": "2.21.0"
+	},
+	"paths": {
+		"/api/v2/login": {
+			"post": {
+				"tags": [
+					"login"
+				],
+				"summary": "Login",
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"schema": {
+										"type": "string",
+										"description": "Schema do banco de dados"
+									},
+									"login": {
+										"type": "string",
+										"description": "Usuário"
+									},
+									"senha": {
+										"type": "string",
+										"description": "Senha"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Login Efetuado"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Schema não informado, Login não informado, Senha não informada, Usuário aguardando ativação, Usuário não localizado, Usuário Inativo, Combinação Usuário/Senha incorretos, Erro ao realizar login"
+					}
+				}
+			}
+		},
+		"/api/v2/pessoas": {
+			"post": {
+				"tags": [
+					"Pessoas - v2"
+				],
+				"summary": "Insere uma pessoa - Pessoa juridica informe o CNPJ, física informe o CPF",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				], 
+				"requestBody": {
+					"description": "Insere uma pessoa - Pessoa júridica informe o CNPJ, física informe o CPF",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									
+									"nome": {
+										"type": "string",
+										"description": "Nome da pessoa"
+									},
+									"email": {
+										"type": "string",
+										"description": "E-mail da pessoa"
+									},
+									"tipo_pessoa": {
+										"type": "integer",
+										"example": 0,
+										"description": "1: Pessoa física, 2 - Pessoa júridica"
+									}
+									
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Pessoa inserida"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Nome não informado, CPF não informado, Erro ao inserir pessoa"
+					}
+				}
+			},
+			"get": {
+				"tags": [
+					"Pessoas - v2"
+				],
+				"summary": "Busca os dados das pessoas",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "nome",
+						"in": "query",
+						"description": "Nome da pessoa",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "cpf",
+						"in": "query",
+						"description": "CPF da pessoa",
+						"type": "string",
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Pessoas encontradas"
+					},
+					"400": {
+						"description": "Erro na busca de pesoas"
+					}
+				}
+			},
+			"put": {
+				"tags": [
+					"Pessoas - v2"
+				],
+				"summary": "Altera uma pessoa",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "Alterar dados pessoa",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"description": "Id da pessoa"
+									},
+									"nome": {
+										"type": "string",
+										"description": "Nome da pessoa"
+									},
+									"email": {
+										"type": "string",
+										"description": "E-mail da pessoa"
+									},
+									"cpf": {
+										"type": "string",
+										"description": "E-mail da pessoa"
+									},
+									"tipo_pessoa": {
+										"type": "integer",
+										"example": 0,
+										"description": "1: Pessoa física, 2 - Pessoa júridica"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Dados Atualizados"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Schema não informado  informe o id, informe o nome, CPF Inválido, Pessoa não encontrada, Erro ao atualizar pessoa"
+					}
+				}
+			}
+		},
+		"/api/v2/pessoas/detalhes": {
+			"get": {
+				"summary": "Busca detalhes sobre as pessoas",
+				"tags": [
+					"Pessoas - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "Id da pessoa"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Pessoa encontrada"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Pessoa não encontrada, Erro na busca da pessoa"
+					}
+				}
+			}
+		},
+		"/api/v2/acessos": {
+			"post": {
+				"summary": "Cria um acesso",
+				"description": "Cria um acesso",
+				"tags": [
+					"Acessos - V2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id_cliente": {
+										"type": "integer",
+										"description": "Id do cliente"
+									},
+									"id_usuario": {
+										"type": "integer",
+										"description": "Id do usuário"
+									},
+									"ind_ativo": {
+										"type": "integer",
+										"description": "Indicador de ativo"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Acesso criado com sucesso"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Acesso não informado, Cliente não informado, Usuário não informado, Nível não informado, Status não informado, Usuário não encontrado, Cliente não encontrado, Já existe um acesso para este usuário no ambiente selecionado, Erro ao cadastrar Acesso"
+					}
+				}
+			},
+			"get": {
+				"summary": "Busca os dados dos acessos",
+				"description": "Busca os dados dos acessos",
+				"tags": [
+					"Acessos - V2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "Id de acesso",
+						"type": "integer",
+						"required": false
+					},
+					{
+						"name": "nivel",
+						"in": "query",
+						"description": "Nível de acesso",
+						"type": "string",
+						"required": false
+					},
+					{
+						"name": "user",
+						"in": "query",
+						"description": "Login",
+						"type": "string",
+						"required": false
+					},
+					{
+						"name": "ind_ativo",
+						"in": "query",
+						"description": "Status de acesso",
+						"type": "string",
+						"required": false
+					},
+					{
+						"name": "token_sie",
+						"in": "query",
+						"description": "Token de acesso à API SIE",
+						"type": "string",
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Acesso encontrado"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Acesso não localizado, Erro ao consultar acessos"
+					}
+				}
+			},
+			"put": {
+				"summary": "Altera um acesso",
+				"description": "Altera um acesso",
+				"tags": [
+					"Acessos - V2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"description": "Id do acesso"
+									},
+									"id_perfil": {
+										"type": "integer",
+										"description": "Id do perfil"
+									},
+									"ind_ativo": {
+										"type": "integer",
+										"description": "Indicador de ativo"
+									},
+									"padrao": {
+										"type": "integer",
+										"description": "Padrão"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Acesso atualizado"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Acesso não informado, Acesso não encontrado, Erro ao atualizar Acesso"
+					}
+				}
+			}
+		},
+		"/api/v2/diploma/validar": {
+			"post": {
+				"summary": "Valida os dados do diploma",
+				"description": "Valida os dados do diploma",
+				"tags": [
+					"Pacotes de Diploma - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"data": {
+										"type": "object",
+										"description": "Pacote importado"
+									},
+									"descricao": {
+										"type": "string",
+										"description": "Pacote"
+									},
+									"id_repositorio": {
+										"type": "integer",
+										"description": "Id do repositório"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Dados válidos"
+					},
+					"400": {
+						"description": "Erro na validação"
+					}
+				}
+			}
+		},
+		"/historicoEscolar/validar": {
+			"post": {
+				"summary": "Valida histórico escolar",
+				"description": "| __Validação do arquivo de importação do pacote__ \n\n  Recebe 2 (dois) tipos de entrada de dados:\n\n  __1. Validar via código JSON__  \n\n Recebe o conteúdo em formato .json diretamente no __body__ da requisição. \n\n  __2. Validar via arquivo JSON__ \n\n Recebe o conteúdo em formato .json dentro de um arquivo incluído no form-data da requisição. É necessário que ao acrescentar na requisição o arquivo seja declarado com a chave 'file'. \n\n __Para verificar uma versão completa com todos os requisitos e possibilidades atualizadas, acesse o sistema do Diploma Digital e navegue até o menu 'Pacotes > Dados de Importação'.__",
+				"tags": [
+					"Pacotes de Histórico - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"data": {
+										"type": "object"
+									},
+									"descricao": {
+										"type": "string",
+										"description": "Descricao"
+									},
+									"id_repositorio": {
+										"type": "integer",
+										"description": "Id do repositório"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Arquivo validado"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Erro ao ler arquivo de importação. Verifique sua estrutura e tente novamente, Erro ao validar o arquivo"
+					}
+				}
+			}
+		},
+		"/v2/historicoEscolar/validar": {
+			"post": {
+				"summary": "Valida histórico escolar",
+				"description": "| __Validação do arquivo de importação do pacote__ \n\n  Recebe 2 (dois) tipos de entrada de dados:\n\n  __1. Validar via código JSON__  \n\n Recebe o conteúdo em formato .json diretamente no __body__ da requisição. \n\n  __2. Validar via arquivo JSON__ \n\n Recebe o conteúdo em formato .json dentro de um arquivo incluído no form-data da requisição. É necessário que ao acrescentar na requisição o arquivo seja declarado com a chave 'file'. \n\n __Para verificar uma versão completa com todos os requisitos e possibilidades atualizadas, acesse o sistema do Diploma Digital e navegue até o menu 'Pacotes > Dados de Importação'.__",
+				"tags": [
+					"Pacotes de Histórico - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"data": {
+										"type": "object"
+									},
+									"descricao": {
+										"type": "string",
+										"description": "Descricao"
+									},
+									"id_repositorio": {
+										"type": "integer",
+										"description": "Id do repositório"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Arquivo validado"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Erro ao ler arquivo de importação. Verifique sua estrutura e tente novamente, Erro ao validar o arquivo"
+					}
+				}
+			}
+		},
+		"/historicoescolar/validardados/": {
+			"post": {
+				"summary": "Valida dados histórico escolar",
+				"description": "__Validação dos dados de importação do pacote__\n\n  \n\nRecebe 2 (dois) tipos de entrada de dados: \n\n        \n\n__1. Validar via código JSON__\n\n        \n\nRecebe o conteúdo em formato .json diretamente no __body__ da requisição.\n\n        \n\n__2. Validar via arquivo JSON__\n\n        \n\nRecebe o conteúdo em formato .json dentro de um arquivo incluído no form-data da requisição.\n\n       \n\nÉ necessário que ao acrescentar na requisição o arquivo seja declarado com a chave 'file'.\n\n        \n\n__Para verificar uma versão completa com todos os requisitos e possibilidades atualizadas, acesse o sistema do Diploma Digital e navegue até o menu 'Pacotes > Dados de Importação'.__",
+				"tags": [
+					"Pacotes de Histórico - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"data": {
+										"type": "object"
+									},
+									"descricao": {
+										"type": "string",
+										"description": "Pacote importado"
+									},
+									"id_repositorio": {
+										"type": "integer"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Dados Válidados"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Cliente não encontrado, Arquivo não encontrado, Erro ao ler arquivo de importação. Verifique sua estrutura e tente novamente, Erro ao validar dados"
+					}
+				}
+			}
+		},
+		"/historicoescolar/inserirdados": {
+			"post": {
+				"summary": "Insere pacotes histórico escolar",
+				"tags": [
+					"Pacotes de Histórico - v1"
+				],
+				"description": " __Insere pacotes de histórico escolar__ \n\n Recebe o body no formato JSON do exemplo, tendo os campos 'data', 'descricao' e 'id_repositorio' como base.\n\n __Para verificar uma versão completa com todos os requisitos e possibilidades atualizadas do campo 'data', acesse o sistema do Diploma Digital e navegue até o menu 'Pacotes > Dados de Importação'.__",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"data": {
+										"type": "object"
+									},
+									"descricao": {
+										"type": "string",
+										"description": "Pacote importado"
+									},
+									"id_repositorio": {
+										"type": "integer",
+										"example": 11
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Dados do histórico escolar validados"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Cliente não encontrado,  Arquivo não encontrado, Erro ao ler arquivo de importação. Verifique sua estrutura e tente novamente, Erro ao validar os dados do histórico escolar"
+					}
+				}
+			}
+		},
+		"/curso/detalhes": {
+			"get": {
+				"summary": "Consulta os detalhes de um curso específico",
+				"description": "Consulta os detalhes de um curso pelo id",
+				"tags": [
+					"Cursos - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id_curso",
+						"in": "query",
+						"description": "hash",
+						"type": "integer",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Curso encontrado"
+					},
+					"400": {
+						"description": "Erro ao buscar o curso"
+					}
+				}
+			}
+		},
+		"/cursos/porpacote": {
+			"get": {
+				"summary": "Lista cursos por pacote",
+				"description": "Requisição lista de cursos por pacote",
+				"tags": [
+					"Cursos - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id_controle",
+						"in": "query",
+						"description": "Id do pacote",
+						"type": "integer",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Cursos encontrados"
+					},
+					"400": {
+						"description": "Erro ao buscar os cursos"
+					}
+				}
+			}
+		},
+		"/cursos/buscar": {
+			"get": {
+				"summary": "Consulta lista de cursos importados",
+				"description": "Sem parâmetros. Retorna a lista de cursos importados.",
+				"tags": [
+					"Cursos - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Cursos encontrados"
+					},
+					"400": {
+						"description": "Erro ao buscar os cursos"
+					}
+				}
+			}
+		},
+		"/curso/confirmar/diploma": {
+			"post": {
+				"summary": "Confirma dados do curso diploma",
+				"description": "Confirmar Dados do curso diploma",
+				"tags": [
+					"Cursos - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id_curso": {
+										"type": "integer",
+										"example": 11,
+										"required": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Curso confirmado"
+					},
+					"400": {
+						"description": "Erro ao confirmar o curso"
+					}
+				}
+			}
+		},
+		"/curso/confirmar/historico": {
+			"post": {
+				"summary": "Confirma dados do curso histórico",
+				"description": "Confirmar Dados do Curso hostórico",
+				"tags": [
+					"Cursos - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id_curso": {
+										"type": "integer",
+										"example": 11,
+										"required": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Curso confirmado"
+					},
+					"400": {
+						"description": "Erro ao confirmar o curso"
+					}
+				}
+			}
+		},
+		"/curso/confirmar/certificado": {
+			"post": {
+				"summary": "Confirma dados do curso certificado",
+				"description": "Confirmar Dados do curso certificado",
+				"tags": [
+					"Cursos - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id_curso": {
+										"type": "integer",
+										"example": 11,
+										"required": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Curso confirmado"
+					},
+					"400": {
+						"description": "Erro ao confirmar o curso"
+					}
+				}
+			}
+		},
+		"/diplomado/anularoficio": {
+			"post": {
+				"summary": "Anula um diploma por erro de ofício",
+				"description": "Anula um diploma por erro de ofício",
+				"tags": [
+					"Diplomados - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"hash": {
+										"type": "string",
+										"example": "123456.12345.6bad88400e3d242bccba7e3..."
+									},
+									"motivo": {
+										"type": "string",
+										"example": "Erro nos dados do diploma."
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Anulação por erro de ofício efetuado com sucesso"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Diploma já anulado. Erro ao anular"
+					}
+				}
+			}
+		},
+		"/diplomado/anularfato": {
+			"post": {
+				"summary": "Anular um diploma por erro de fato",
+				"description": "Anular um diploma por erro de fato",
+				"tags": [
+					"Diplomados - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"hash": {
+										"type": "string",
+										"example": "123456.12345.6bad88400e3d242bccba7e3..."
+									},
+									"motivo": {
+										"type": "string",
+										"example": "Erro nos dados do diploma."
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Anulação por erro de fato efetuado com sucesso."
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Diploma já anulado. Erro ao anular"
+					}
+				}
+			}
+		},
+		"/diplomado/reativardiploma": {
+			"post": {
+				"summary": "Reativa o diploma que havia sido anulado por fato",
+				"description": "Reativa o diploma que havia sido anulado por fato.",
+				"tags": [
+					"Diplomados - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"hash": {
+										"type": "string",
+										"example": "123456.12345.6bad88400e3d242bccba7e3..."
+									},
+									"motivo": {
+										"type": "string",
+										"example": " Dados do diploma estavam corretos."
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": " Reativação do diploma efetuada."
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Diploma já reativado, Erro ao reativar."
+					}
+				}
+			}
+		},
+		"/diplomado": {
+			"get": {
+				"summary": "Consulta os dados de um diplomado pelo código de validação do diploma",
+				"description": "Consulta os dados de um diplomado pelo código de validação do diploma",
+				"tags": [
+					"Diplomados - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "codigo",
+						"in": "query",
+						"description": "hash",
+						"type": "string",
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "  Finalizada consulta ao diplomado."
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: O código de Validação do diploma não foi informado. , Erro ao realizar a consulta ao diplomado."
+					}
+				}
+			}
+		},
+		"/diplomado/historico": {
+			"get": {
+				"summary": "Consulta os dados de um histórico pelo código de validação do histórico",
+				"description": "Consulta os dados de um histórico pelo código de validação do histórico",
+				"tags": [
+					"Diplomados - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "codigo",
+						"in": "query",
+						"description": "hash",
+						"type": "string",
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "  Finalizada consulta ao diplomado."
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: O código de Validação do histórico não foi informado. , Erro ao realizar a consulta ao histórico."
+					}
+				}
+			}
+		},
+		"/diplomado/docs": {
+			"post": {
+				"summary": "Busca os arquivos XML e PDF do diplomado que estiver com o curso em status 'Gerado(3)'",
+				"description": "Busca os arquivos XML e PDF do diplomado que estiver com o curso em status 'Gerado (3)'",
+				"tags": [
+					"Diplomados - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Arquivos encontrados."
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Usuário sem permissão. ,  Diplomado não encontrado.,  Houve um erro ao acessar os arquivos."
+					}
+				}
+			}
+		},
+		"/geracaodiploma/buscar": {
+			"get": {
+				"summary": "Busca pacote",
+				"description": "Busca pacotes",
+				"tags": [
+					"Pacotes de Diploma - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "descricao",
+						"in": "query",
+						"description": "Descrição por pacote",
+						"type": "integer",
+						"required": false
+					},
+					{
+						"name": "dt_inicial",
+						"in": "query",
+						"description": "Data inicial",
+						"type": "integer",
+						"example": "2022-01-01",
+						"required": true
+					},
+					{
+						"name": "dt_final",
+						"in": "query",
+						"description": "Data final",
+						"type": "integer",
+						"example": "2022-05-01",
+						"required": true
+					},
+					{
+						"name": "cancelados",
+						"in": "query",
+						"description": "Pacotes cancelados",
+						"type": "boolean",
+						"required": false
+					},
+					{
+						"name": "repositorio",
+						"in": "query",
+						"description": "Id do repositório",
+						"type": "integer",
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Diplomas encontrados."
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu:  Informe a data inicial, Informe a data final , Data inicial maior que a final,  Erro ao buscar os diplomas."
+					}
+				}
+			}
+		},
+		"/pacote/detalhamento": {
+			"get": {
+				"summary": "Consulta os detalhes do pacote",
+				"description": "| __Busca os detalhes do pacote__ \n\n   id_controle : Este id é gerado apos a inserção de um novo pacote no sistema.",
+				"tags": [
+					"Pacotes de Diploma - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id_controle",
+						"in": "query",
+						"description": "Id do controle de geração de diplomas",
+						"type": "integer",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Pacote encontrado."
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu:  Erro ao buscar o pacote."
+					}
+				}
+			}
+		},
+		"/pacote/repositorios": {
+			"get": {
+				"summary": "Busca pacotes por repositório",
+				"description": "Buscar Pacotes por repositório",
+				"tags": [
+					"Pacotes de Diploma - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id_repositorio",
+						"in": "query",
+						"description": "Id do repositório",
+						"type": "integer",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Pacotes do repositórios encontrados."
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Erro ao buscar os pacotes."
+					}
+				}
+			}
+		},
+		"/pacote/cancelar": {
+			"post": {
+				"summary": "Cancela pacote de diploma",
+				"description": "Cancela pacote de diploma",
+				"tags": [
+					"Pacotes de Diploma - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11,
+										"required": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Pacote cancelado com sucesso."
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu:  Erro no cancelamento do pacote"
+					}
+				}
+			}
+		},
+		"/api/v2/repositorios": {
+			"get": {
+				"summary": "Busca os dados dos repositórios",
+				"description": "Busca os dados dos repositórios",
+				"tags": [
+					"Repositórios - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "descr_repositorio",
+						"in": "query",
+						"description": "Descrição do repositório",
+						"type": "string",
+						"required": false
+					},
+					{
+						"name": "dt_inicial",
+						"in": "query",
+						"description": "Data Inicial de criação",
+						"type": "string",
+						"required": false
+					},
+					{
+						"name": "dt_final",
+						"in": "query",
+						"description": "Data Final da criação",
+						"type": "string",
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Repositórios Encontrados"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu:  Usuário sem permissão"
+					}
+				}
+			},
+			"post": {
+				"summary": "Insere um repositório",
+				"description": "Insere um repositório ",
+				"tags": [
+					"Repositórios - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+						"schema": {
+								"type": "object",
+								"properties": {
+									"descr_repositorio": {
+										"type": "string",
+										"example": "Nome do Repositório"
+									},
+									"ativo": {
+										"type": "boolean",
+										"example": true
+									},
+									"id_template": {
+										"type": "integer",
+										"example": 1
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Repositório Inserido"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu:  Usuário sem permissão, Descrição não informada, Já existe um repositório com a descrição informada, Erro ao inserir repositório"
+					}
+				}
+			},
+			"put": {
+				"summary": "Altera um repositório",
+				"description": "Altera um repositório",
+				"tags": [
+					"Repositórios - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 10
+									},
+									"descr_repositorio": {
+										"type": "string",
+										"example": "Nome do Repositório"
+									},
+									"ativo": {
+										"type": "boolean",
+										"example": true
+									},
+									"id_template": {
+										"type": "integer",
+										"example": 1
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Repositório Alterado"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu:  Usuário sem permissão, Já existe um repositório com a descrição informada,  Repositório não informado, Repositório não localizado, Erro ao alterar repositório"
+					}
+				}
+			}
+		},
+		"/api/v2/repositorios/desativar": {
+			"patch": {
+				"summary": "Desativa um determinado repositório",
+				"description": " Desativa um determinado repositório",
+				"tags": [
+					"Repositórios - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11,
+										"required": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Repositório Desativado"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu:  Id não informado, Usuário sem permissão, Repositório não localizado, Existem diplomados vinculados ao repositório,  Erro ao desativar repositório"
+					}
+				}
+			}
+		},
+		"/api/v2/repositorios/ativar": {
+			"patch": {
+				"summary": "Ativa um determinado repositório",
+				"description": "Ativa um determinado repositório",
+				"tags": [
+					"Repositórios - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11,
+										"required": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Repositório Ativado"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu:  Id não informado, Usuário sem permissão, Repositório não localizado, Erro ao ativar repositório"
+					}
+				}
+			}
+		},
+		"/api/v2/assinaturas": {
+			"get": {
+				"summary": "Busca os dados das assinaturas",
+				"description": "Busca os dados das assinaturas",
+				"tags": [
+					"Assinaturas - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "nome",
+						"in": "query",
+						"description": "Nome",
+						"type": "string"
+					},
+					{
+						"name": "email",
+						"in": "query",
+						"description": "E-mail",
+						"type": "string"
+					},
+					{
+						"name": "tipo",
+						"in": "query",
+						"description": "Tipo de assinatura",
+						"type": "integer"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Ok"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Erro ao buscar assinaturas"
+					}
+				}
+			},
+			"post": {
+				"summary": "Insere assinatura",
+				"description": "Insere assinatura",
+				"tags": [
+					"Assinaturas - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"email": {
+										"type": "string",
+										"example": "nome@email.com"
+									},
+									"idPessoa": {
+										"type": "integer",
+										"example": 111
+									},
+									"tipo_assinatura": {
+										"type": "integer",
+										"example": 1
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Assinatura cadastrada com sucesso"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Schema não informado, E-mail inválido, Pessoa não localizada, Já existe uma assinatura com o e-mail cadastrado, Erro ao cadastrar nova assinatura"
+					}
+				}
+			},
+			"put": {
+				"summary": "Altera assinatura",
+				"description": "Altera assinatura",
+				"tags": [
+					"Assinaturas - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11,
+										"required": true
+									},
+									"email": {
+										"type": "string",
+										"example": "nome@email.com"
+									},
+									"idPessoa": {
+										"type": "integer",
+										"example": 111
+									},
+									"tipo_assinatura": {
+										"type": "integer",
+										"example": 1
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Assinatura atualizada com sucesso"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Schema não informado, E-mail inválido, Pessoa não localizada, Já existe uma assinatura com o e-mail cadastrado"
+					}
+				}
+			}
+		},
+		"/api/v2/assinaturas/ativar": {
+			"patch": {
+				"summary": "Ativa/Desativa assinatura",
+				"description": "Ativa/Desativa assinatura",
+				"tags": [
+					"Assinaturas - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"required": true
+									},
+									"ativo": {
+										"type": "boolean",
+										"required": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Assinatura ativada/desativada com sucesso"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu:   Assinatura não encontrada, Erro ao ativar/desativar assinatura"
+					}
+				}
+			}
+		},
+		"/api/v2/assinaturas/detalhes": {
+			"get": {
+				"summary": "Busca os dados de uma assinatura",
+				"description": "Busca os dados de uma assinatura",
+				"tags": [
+					"Assinaturas - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "Id da assinatura",
+						"type": "integer",
+						"required": true
+					}
+				],
+				
+				"responses": {
+					"200": {
+						"description": "Assinatura retornada"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Assinatura não localizada"
+					}
+				}
+			}
+		},
+		"/api/v2/atribuicoes": {
+			"post": {
+				"summary": "Insere uma atribuição",
+				"description": " Insere uma atribuição",
+				"tags": [
+					"Atribuições - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id_assinatura": {
+										"type": "integer",
+										"required": true
+									},
+									"nome": {
+										"type": "string",
+										"required": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Atribuicao cadastrada com sucesso."
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Schema não informado, Assinatura não localizada, Erro ao cadastrar nova atribuição"
+					}
+				}
+			},
+			"get": {
+				"summary": "Busca os dados das atribuições",
+				"description": "Busca os dados das atribuições",
+				"tags": [
+					"Atribuições - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "pessoa_nome",
+						"in": "query",
+						"description": "Nome de pessoa",
+						"type": "string",
+						"required": false
+					},
+					{
+						"name": "nome",
+						"in": "query",
+						"description": "Nome da atribuição",
+						"type": "string",
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Sucesso"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Atribuição não localizada, Erro"
+					}
+				}
+			},
+			"put": {
+				"summary": "Altera uma atribuição",
+				"description": "Altera uma atribuição",
+				"tags": [
+					"Atribuições - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"required": true
+									},
+									"id_assinatura": {
+										"type": "integer",
+										"required": true
+									},
+									"nome": {
+										"type": "string",
+										"required": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Atribuicao atualizada com sucesso."
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Atribuicao não informada., Atribuicao não encontrada., Assinatura não encontrada, Erro ao atualizar atribuição."
+					}
+				}
+			}
+		},
+		"/api/v2/atribuicoes/buscar": {
+			"get": {
+				"summary": "Busca os dados de uma atribuição",
+				"description": "Busca os dados de uma atribuição",
+				"tags": [
+					"Atribuições - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "ID atribuição",
+						"type": "integer",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Atribuição atualizada com sucesso"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Atribuição não informada., Atribuição não encontrada., Assinatura não encontrada, Erro ao atualizar atribuição "
+					}
+				}
+			}
+		},
+		"/diploma/xml/gerar": {
+			"post": {
+				"summary": "Gera os arquivos de um pacote específico",
+				"description": "Gera os arquivos de um pacote específico",
+				"tags": [
+					"Pacotes de Diploma - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"PacoteId": {
+										"type": "integer",
+										"example": 111,
+										"required": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Arquivos gerados com sucesso"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu:  Erro ao gerar os arquivos"
+					}
+				}
+			}
+		},
+		"/historico/xml/gerar": {
+			"post": {
+				"summary": "Gera os arquivos de histórico de um pacote específico",
+				"description": "Gera os arquivos de histórico de um pacote específico",
+				"tags": [
+					"Pacotes de Diploma - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"PacoteId": {
+										"type": "integer",
+										"example": 111,
+										"required": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Arquivos gerados com sucesso"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu:  Erro ao gerar os arquivos"
+					}
+				}
+			}
+		},
+		"/CC/xml/gerar": {
+			"post": {
+				"summary": "Gera os arquivos de certificado de um pacote específico",
+				"description": "Gera os arquivos de certificado de um pacote específico",
+				"tags": [
+					"Geração de Certificados - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"PacoteId": {
+										"type": "integer",
+										"example": 111,
+										"required": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Arquivos gerados com sucesso"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu:  Erro ao gerar os arquivos"
+					}
+				}
+			}
+		},
+		"/diploma/assinatura/enviar": {
+			"post": {
+				"summary": "Envia um pacote ou curso para assinatura",
+				"description": "Envia um pacote ou curso para assinatura",
+				"tags": [
+					"Pacotes de Diploma - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id_curso": {
+										"type": "integer",
+										"example": 111
+									},
+									"id_pacote": {
+										"type": "integer",
+										"example": 111,
+										"required": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Arquivos enviados para assinatura."
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Erro ao enviar para assinatura"
+					}
+				}
+			}
+		},
+		"/historico/assinatura/enviar": {
+			"post": {
+				"summary": "Envia um pacote ou curso de histórico para assinatura ",
+				"description": "Envia um pacote ou curso de histórico para assinatura",
+				"tags": [
+					"Pacotes de Diploma - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id_curso": {
+										"type": "integer",
+										"example": 111
+									},
+									"id_pacote": {
+										"type": "integer",
+										"example": 111,
+										"required": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Arquivos enviados para assinatura."
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Erro ao enviar para assinatura"
+					}
+				}
+			}
+		},
+		"/certificado/assinatura/enviar": {
+			"post": {
+				"summary": "Envia um pacote ou curso de certificado para assinatura",
+				"description": "Envia um pacote ou curso de certificado para assinatura",
+				"tags": [
+					"Pacotes de Diploma - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id_curso": {
+										"type": "integer",
+										"example": 111
+									},
+									"id_pacote": {
+										"type": "integer",
+										"example": 111,
+										"required": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Arquivos enviados para assinatura."
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Erro ao enviar para assinatura"
+					}
+				}
+			}
+		},
+		"/asten/dadosEnvelope": {
+			"post": {
+				"summary": "Busca os dados do envelope enviado para assinatura",
+				"description": " | __Busca os dados do envelope enviado para assinatura__  __-__ \n\n id_envelope:  É obtido no end-point 'pacote/detalhamento' na propiedade 'id_envelope' que retorna na resposta da requisição.",
+				"tags": [
+					"Pacotes de Diploma - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id_envelope": {
+										"type": "integer",
+										"example": 111,
+										"required": true
+									},
+									"docs": {
+										"type": "boolean",
+										"example": true
+									},
+									"eventos": {
+										"type": "boolean",
+										"example": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Envelope Encontrado."
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Erro ao encontrar o envelope"
+					}
+				}
+			}
+		},
+		"/api/v2/cancelamentos": {
+			"post": {
+				"summary": "Insere novo cancelamento",
+				"description": "Insere novo cancelamento",
+				"tags": [
+					"Cancelamentos - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id_diplomado": {
+										"type": "integer",
+										"required": true
+									},
+									"id_usuario": {
+										"type": "integer",
+										"required": true
+									},
+									"motivo": {
+										"type": "string",
+										"required": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Diplomado cancelado com sucesso"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Token de integração com o Asten Assinatura não encontrado., Cancelamento não foi efetuado no Asten Assinatura, Envelope não encontrado no Asten Assinatura.,  Erro ao tentar cancelar o diploma"
+					}
+				}
+			},
+			"get": {
+				"summary": "Busca os envelopes",
+				"description": "Busca os envelopes",
+				"tags": [
+					"Cancelamentos - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "nome_diplomado",
+						"in": "query",
+						"description": "Nome diplomado",
+						"type": "string",
+						"required": false
+					},
+					{
+						"name": "nome_curso",
+						"in": "query",
+						"description": "Nome curso",
+						"type": "string",
+						"required": false
+					},
+					{
+						"name": "data_inicial",
+						"in": "query",
+						"description": "Data inicial",
+						"type": "data",
+						"required": false
+					},
+					{
+						"name": "data_final",
+						"in": "query",
+						"description": "Data Final",
+						"type": "data",
+						"required": false
+					}
+				],
+				"responses": {
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Cancelamentos não encontrados"
+					}
+				}
+			}
+		},
+		"/api/v2/cancelamentos/buscar": {
+			"get": {
+				"summary": "Busca um cancelamento",
+				"description": "Busca um cancelamento",
+				"tags": [
+					"Cancelamentos - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "ID Cancelamento",
+						"type": "integer",
+						"required": false
+					},
+					{
+						"name": "id_diplomado",
+						"in": "query",
+						"description": "ID Diplomado",
+						"type": "integer",
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Envelope Encontrado."
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Cancelamento não encontrado, "
+					}
+				}
+			}
+		},
+		"/api/v2/anulacoes": {
+			"get": {
+				"summary": "Busca anulações",
+				"description": "Busca Anulações",
+				"tags": [
+					"Anulações - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "nome_diplomado",
+						"in": "query",
+						"description": "Nome Diplomado",
+						"type": "string",
+						"required": false
+					},
+					{
+						"name": "nome_curso",
+						"in": "query",
+						"description": "Nome curso",
+						"type": "string",
+						"required": false
+					},
+					{
+						"name": "data_inicial",
+						"in": "query",
+						"description": "Data Inicial",
+						"type": "data",
+						"required": false
+					},
+					{
+						"name": "data_final",
+						"in": "query",
+						"description": " Data Final",
+						"type": "data",
+						"required": false
+					},
+					{
+						"name": "motivo",
+						"in": "query",
+						"description": "Motivo da Anulação",
+						"type": "string",
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Sucesso."
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Erro"
+					}
+				}
+			}
+		},
+		"/geracaohistorico/buscar": {
+			"get": {
+				"summary": "Busca pacotes de históricos",
+				"description": "Busca pacotes de históricos",
+				"tags": [
+					"Pacotes de Histórico - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "descricao",
+						"in": "query",
+						"description": "Descrição do pacote",
+						"type": "string",
+						"example": "Pacote de teste",
+						"required": false
+					},
+					{
+						"name": "dt_inicial",
+						"in": "query",
+						"description": "Data inicial para filtragem, baseando-se na data de criação do pacote.",
+						"type": "data",
+						"example": "2022-01-01",
+						"required": true
+					},
+					{
+						"name": "dt_final",
+						"in": "query",
+						"description": "Data final para filtragem, baseando-se na data de criação do pacote.",
+						"type": "data",
+						"example": "2022-05-01",
+						"required": true
+					},
+					{
+						"name": "repositorio",
+						"in": "query",
+						"description": "Id do repositório",
+						"type": "integer",
+						"example": 11,
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Sucesso."
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Informe a data inicial, Informe a data final,  Data inicial maior que a final, Erro ao buscar pacotes"
+					}
+				}
+			}
+		},
+		"/geracaohistorico/detalhamento": {
+			"get": {
+				"summary": "Busca os detalhes de um pacote",
+				"description": "Busca os detalhes de um pacote",
+				"tags": [
+					"Pacotes de Histórico - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id_controle",
+						"in": "query",
+						"description": "Id do pacote que necessita ser consultado",
+						"type": "integer",
+						"example": "12",
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Repositório retornado"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Pacote não informado, Pacote não encontrado, Erro na busca do repositório"
+					}
+				}
+			}
+		},
+		"/geracaohistorico/cancelar": {
+			"post": {
+				"summary": "Cancela um pacote",
+				"description": "Cancela um pacote",
+				"tags": [
+					"Pacotes de Histórico - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 12,
+										"required": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Pacote cancelado"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Pacote não informado, Pacote não encontrado, Este pacote não pode ser mais cancelado, Este pacote não pode ser mais cancelado pois pelo menos um dos cursos já foi enviado para assinatura,  Erro ao cancelar pacote"
+					}
+				}
+			}
+		},
+		"/certificados/validar": {
+			"post": {
+				"summary": "Valida os pacotes de certificados",
+				"description": "| __Valida os pacotes de certificados__ \n\n __1. Validar via código JSON__ \n\n Recebe o conteúdo em formato .json diretamente no __body__ da requisição. \n\n   __2. Validar via arquivo JSON__ \n\n  Recebe o conteúdo em formato .json dentro de um arquivo incluído no form-data da requisição.\n\n   É necessário que ao acrescentar na requisição o arquivo seja declarado com a chave 'file'.",
+				"tags": [
+					"Geração de Certificados - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"data": {
+										"type": "object"
+									},
+									"descricao": {
+										"type": "string",
+										"example": "Pacote importado"
+									},
+									"id_repositorio": {
+										"type": "integer",
+										"example": 11
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Arquivo validado com sucesso"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Erro ao ler o arquivo de importação de certificados. Verifique sua estrutura e tente novamente, Erro durante a validação do arquivo"
+					}
+				}
+			}
+		},
+		"/certificados/validardados": {
+			"post": {
+				"summary": "Valida dados de importação do pacote",
+				"description": "\n\n __Valida dados de importação do pacote__ \n\n Recebe 2 (dois) tipos de entrada de dados: \n\n  __1. Validar via código JSON__  \n\n    \n\nRecebe o conteúdo em formato .json diretamente no __body__ da requisição.\n\n     \n\n __2. Validar via arquivo JSON__\n\n      \n\nRecebe o conteúdo em formato .json dentro de um arquivo incluído no form-data da requisição. \n\n     \n\nÉ necessário que ao acrescentar na requisição o arquivo seja declarado com a chave 'file'.",
+				"tags": [
+					"Geração de Certificados - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"data": {
+										"type": "object"
+									},
+									"descricao": {
+										"type": "string",
+										"example": "Pacote importado"
+									},
+									"id_repositorio": {
+										"type": "integer",
+										"example": 11
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Dados validados"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Cliente não encontrado, Arquivo de certificado não encontrado, Erro ao ler arquivo de importação. Verifique seu estrutura e tente novamente, Erro ao validar os dados"
+					}
+				}
+			}
+		},
+		"/certificados/": {
+			"post": {
+				"summary": "Insere pacote de certificados",
+				"description": "__Inserção de pacote de certificados __ \n\n Recebe o body no formato JSON do exemplo, tendo os campos 'data',      'descricao' e 'id_repositorio' como base. \n\n      \n\nPara verificar uma versão completa com todos os requisitos e possibilidades atualizadas do campo 'data', acesse o sistema do Diploma Digital e navegue até o menu 'Pacotes > Dados de Importação'.",
+				"tags": [
+					"Geração de Certificados - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"data": {
+										"type": "object"
+									},
+									"descricao": {
+										"type": "string",
+										"example": "Pacote importado"
+									},
+									"id_repositorio": {
+										"type": "integer",
+										"example": 11
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Novo pacote criado"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Cliente não localizado, Arquivo não encontrado, Erro ao ler arquivo de importação. Verifique sua estrutura e tente novamente, Houve um problema ao inserir o pacote"
+					}
+				}
+			}
+		},
+		"/certificados": {
+			"get": {
+				"summary": "Busca pacotes de geração de certificados",
+				"description": "Busca pacotes de geração de certificados",
+				"tags": [
+					"Geração de Certificados - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "filtro_descricao",
+						"in": "query",
+						"description": "Descrição do pacote",
+						"type": "string",
+						"example": "Pacote de teste"
+					},
+					{
+						"name": "dt_inicial",
+						"in": "query",
+						"description": "Data inicial para filtragem, baseando-se na data de criação do pacote.",
+						"type": "data",
+						"example": "2022-01-01",
+						"required": true
+					},
+					{
+						"name": "dt_final",
+						"in": "query",
+						"description": " Data final para filtragem, baseando-se na data de criação do pacote",
+						"type": "data",
+						"example": "2022-05-01",
+						"required": true
+					},
+					{
+						"name": "cancelados",
+						"in": "query",
+						"description": "Se mostrará ou não pacotes cancelados.",
+						"type": "boolean",
+						"example": true
+					},
+					{
+						"name": "repositorio",
+						"in": "query",
+						"description": " Id do repositório",
+						"type": "integer",
+						"example": 12
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Pacotes retornados"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Data inicial não informada,  Data final não informada, Data inicial maior que a final,    Erro na busca de pacotes"
+					}
+				}
+			}
+		},
+		"/certificados/detalhes": {
+			"get": {
+				"summary": "Detalhamento de pacote de geração de certificados",
+				"description": "Detalhamento de pacote de geração de certificados",
+				"tags": [
+					"Geração de Certificados - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id_controle",
+						"in": "query",
+						"description": "Id do repositório que necessita ser consultado",
+						"type": "integer",
+						"example": "111",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Detalhamento do pacote retornado"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Pacote não informado,  Pacote não encontrado, Erro na busca de busca de detalhes do pacote"
+					}
+				}
+			}
+		},
+		"/certificados/cancelar": {
+			"post": {
+				"summary": "Cancela pacote de geração de certificado",
+				"description": "Cancela pacote de geração de certificado",
+				"tags": [
+					"Geração de Certificados - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11,
+										"required": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Pacote cancelado com sucesso."
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Pacote não informado,  Pacote não encontrado, Este pacote não pode ser mais cancelado, Pacote não pode ser mais cancelado, Um dos cursos já foi enviado para assinatura,Erro no cancelamento do pacote"
+					}
+				}
+			}
+		},
+		"/api/v2/certificados/validar": {
+			"post": {
+				"summary": "Valida os pacotes de certificados",
+				"description": "__Valida os pacotes de certificados__\n\n   \n\n __1. Validar via código JSON__\n\n  \n\nRecebe o conteúdo em formato .json diretamente no __body__ da requisição.\n\n __2. Validar via arquivo JSON__ \n\nRecebe o conteúdo em formato .json dentro de um arquivo incluído no form-data da requisição.  \n\n    \n\nÉ necessário que ao acrescentar na requisição o arquivo seja declarado com a chave 'file'.",
+				"tags": [
+					"Geração de Certificados - V2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"data": {
+										"type": "object"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": " Arquivo validado com sucesso."
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Erro ao ler o arquivo de importação de certificados. Verifique sua estrutura e tente novamente, Erro durante a validação do arquivo"
+					}
+				}
+			}
+		},
+		"/api/v2/arquivos_fiscalizacao": {
+			"post": {
+				"summary": "Cria um arquivo de fiscalização",
+				"description": " | __Cria um arquivo de fiscalização__ \n\n       \n\n__'id':__       Não é necessário enviar o id na requisição, ele é criado automaticamente no sistema    \n\n   \n\n __'descricao':__       Uma breve descrição sobre o arquivo de fiscalização   \n\n           \n\n__'tipo':__       Descreve o tipo de arquivo: \n\n        \n\n Tipo - Opção 1: Diplomas Fiscalizados    \n\n  Tipo - Opção 2: Diplomas Anulados \n\n\n\n__'contexto':__ Descreve o tipo de instituição : \n\n     \n\nOpção  E - Instituição Emissora |  \n\n      \n\n Opção R - Instituição Registradora \n\n   \n\n__5. 'dt_inicio' e 'dt_fim':__       Datas que compreendem sobre a emissão ou anulação de diplomas, conforme o tipo.",
+				"tags": [
+					"Arquivos de Fiscalização - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11
+									},
+									"descricao": {
+										"type": "string",
+										"example": "Descrição do arquivo"
+									},
+									"id_repositorio": {
+										"type": "integer",
+										"example": 111
+									},
+									"tipo": {
+										"type": "integer",
+										"example": 1
+									},
+									"contexto": {
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 1,
+										"example": "E"
+									},
+									"dt_inicio": {
+										"type": "string",
+										"example": "1970-01-01"
+									},
+									"dt_fim": {
+										"type": "string",
+										"example": "1970-01-01"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Arquivo criado com sucesso"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Algum dado obrigatório não foi informado, Erro ao cadastrar Arquivo"
+					}
+				}
+			},
+			"get": {
+				"summary": "Busca os dados dos arquivos",
+				"description": "__Busca os dados dos Arquivos__",
+				"tags": [
+					"Arquivos de Fiscalização - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id_usuario_criador",
+						"in": "query",
+						"description": "Id do usuario criador",
+						"type": "integer",
+						"required": false
+					},
+					{
+						"name": "tipo",
+						"in": "query",
+						"description": "Tipo do arquivo",
+						"type": "integer",
+						"required": false
+					},
+					{
+						"name": "status",
+						"in": "query",
+						"description": "Status do arquivo",
+						"type": "string",
+						"required": false
+					},
+					{
+						"name": "descricao",
+						"in": "query",
+						"description": "Descrição do arquivo",
+						"type": "string",
+						"required": false
+					},
+					{
+						"name": "dt_inicio",
+						"in": "query",
+						"description": "Data Início do Filtro",
+						"type": "string",
+						"example": "1970-01-01",
+						"required": false
+					},
+					{
+						"name": "dt_fim",
+						"in": "query",
+						"description": "Data Fim do Filtro",
+						"type": "string",
+						"example": "1970-01-01",
+						"required": false
+					}
+				],
+				"responses": {
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Arquivo não localizado, Erro ao consultar Arquivos"
+					}
+				}
+			},
+			"put": {
+				"summary": "Altera um arquivo de fiscalização",
+				"description": "  __Altera um Arquivo de fiscalização__ \n\n  __1. 'id':__      É necessário enviar o id na requisição para o sistema saber qual arquivo será alterado",
+				"tags": [
+					"Arquivos de Fiscalização - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11
+									},
+									"descricao": {
+										"type": "string",
+										"example": "Descrição do arquivo"
+									},
+									"id_repositorio": {
+										"type": "integer",
+										"example": 111
+									},
+									"tipo": {
+										"type": "integer",
+										"example": 1
+									},
+									"contexto": {
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 1,
+										"example": "E"
+									},
+									"dt_inicio": {
+										"type": "string",
+										"example": "1970-01-01"
+									},
+									"dt_fim": {
+										"type": "string",
+										"example": "1970-01-01"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Arquivo atualizado com sucesso"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: `Acesso não informado, Acesso não encontrado, Erro ao atualizar Acesso"
+					}
+				}
+			}
+		},
+		"/api/v2/arquivos_fiscalizacao/getDetalhes": {
+			"get": {
+				"summary": "Busca os detalhes de um arquivo",
+				"description": "Busca os detalhes de um arquivo",
+				"tags": [
+					"Arquivos de Fiscalização - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "Id do Arquivo",
+						"type": "integer",
+						"required": true
+					}
+				],
+				"responses": {
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Arquivo não localizado, Erro ao consultar Arquivo"
+					}
+				}
+			}
+		},
+		"/api/v2/arquivos_fiscalizacao/atualizarAtribuicoes": {
+			"post": {
+				"summary": "Atualiza atribuições",
+				"description": "Atualiza atribuições",
+				"tags": [
+					"Arquivos de Fiscalização - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11
+									},
+									"atribuicoes": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "integer",
+													"example": 11
+												},
+												"nome": {
+													"type": "string",
+													"example": "Diretor"
+												},
+												"tipo": {
+													"type": "integer",
+													"example": 1
+												},
+												"ordem": {
+													"type": "integer",
+													"example": 1
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Fluxo de assinaturas atualizado"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Arquivo não informado, Id não informado, Fluxo de assinaturas não definido, Erro de atribuição, Arquivo não encontrado, Houve um erro ao alterar o arquivo"
+					}
+				}
+			}
+		},
+		"/api/v2/arquivos_fiscalizacao/confirmar": {
+			"post": {
+				"summary": "Confirma arquivo de fiscalização",
+				"description": " Confirma arquivo de fiscalização",
+				"tags": [
+					"Arquivos de Fiscalização - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Arquivo confirmado com sucesso"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Informe o id do arquivo,   Arquivo não encontrado,   Apenas arquivos com status 'Criado' podem ser confirmados, Atribuições para o arquivo não configuradas,  Houve um erro na confirmação do arquivo"
+					}
+				}
+			}
+		},
+		"/api/v2/arquivos_fiscalizacao/reabrir": {
+			"post": {
+				"summary": "Reabre arquivo de fiscalização",
+				"description": " Reabre arquivo de fiscalização",
+				"tags": [
+					"Arquivos de Fiscalização - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Arquivo reaberto com sucesso"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Informe o id do arquivo,  Arquivo não encontrado,  Apenas arquivos com status 'Confirmado' ou 'Gerado' podem ser reabertos, Houve um erro ao reabrir o Arquivo"
+					}
+				}
+			}
+		},
+		"/api/v2/arquivos_fiscalizacao/cancelar": {
+			"post": {
+				"summary": "Cancela arquivo de fiscalização",
+				"description": "Cancela arquivo de fiscalização",
+				"tags": [
+					"Arquivos de Fiscalização - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "O arquivo foi cancelado"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu:  Informe o id do arquivo, Arquivo não encontrado,  Arquivos já enviados para assinatura, não podem ser cancelados, Este arquivo já se encontra cancelado,  Este arquivo já se encontra cancelado no Asten Assinatura, Este arquivos já se encontra concluído e não pode ser cancelado , Houve um erro ao cancelar o Arquivo    "
+					}
+				}
+			}
+		},
+		"/api/v2/arquivos_fiscalizacao/gerar": {
+			"post": {
+				"summary": "Gera arquivo de fiscalização",
+				"description": "Gera arquivo de fiscalização",
+				"tags": [
+					"Arquivos de Fiscalização - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Arquivo de fiscalização gerado com sucesso"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu:  Informe o id do arquivo, Arquivo não encontrado,  Apenas arquivos confirmados podem ser gerados, Nenhuma versão válida encontrada para a geração do XML, Instituição principal não encontrada, Chave API não configurada,  Nenhum diploma elegível para geração do arquivo, Tipo do arquivo incompatível, Template não encontrado, Não foi possível realizar a validação do arquivo,  Arquivo inválido, Houve um erro ao gerar o arquivo"
+					}
+				}
+			}
+		},
+		"/api/v2/arquivos_fiscalizacao/baixar": {
+			"post": {
+				"summary": "Baixa arquivo de fiscalização",
+				"description": "Baixa arquivo de fiscalização",
+				"tags": [
+					"Arquivos de Fiscalização - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Realizado download do arquivo"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu:  Informe o id do arquivo, Arquivo não encontrado, Apenas arquivos no status 'Gerado' podem ser baixados, Tipo do Arquivo incorreto, Houve um erro ao acessar os arquivos "
+					}
+				}
+			}
+		},
+		"/api/v2/arquivos_fiscalizacao/assinar": {
+			"post": {
+				"summary": "Assina arquivo de fiscalização",
+				"description": "Assina arquivo de fiscalização",
+				"tags": [
+					"Arquivos de Fiscalização - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Envio para assinatura realizado com sucesso"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu:  Informe o id do arquivo,  Arquivo não encontrado, Apenas arquivos gerados podem ser enviados para assinatura, Cliente não localizado, Instituição não configurada corretamente, Chave API não configurada, Repositório padrão para arquivos de fiscalização não configurado, Pasta padrão para arquivos de fiscalização não configurada, Atribuições para o arquivo não configuradas, Houve um erro ao enviar para assinatura"
+					}
+				}
+			}
+		},
+		"/api/v2/arquivos_fiscalizacao/dadosEnvelope": {
+			"post": {
+				"summary": "Busca os dados do envelope enviado para assinatura",
+				"description": "__Busca os dados do envelope enviado para assinatura__ __-__ \n\n      \n\nid_envelope: É obtido no end-point '/api/v2/arquivos_fiscalizacao/getDetalhes' na propiedade 'id_envelope' que retorna na resposta da requisição.",
+				"tags": [
+					"Arquivos de Fiscalização - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id_envelope": {
+										"type": "integer",
+										"example": 11,
+										"required": true
+									},
+									"docs": {
+										"type": "boolean",
+										"example": true
+									},
+									"eventos": {
+										"type": "boolean",
+										"example": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Envelope Encontrado"
+					},
+					"400": {
+						"description": "Uma das seguintes situações ocorreu: Erro ao encontrar o envelope"
+					}
+				}
+			}
+		},
+		"/api/v2/archivematica/aptos": {
+			"get": {
+				"summary": "Busca integrações salvas",
+				"description": " __Busca integrações salvas__ \n\n  __-__        Este End-Point busca todas as integrações salvas.        __-__       Requer apenas o token de autenticação. ",
+				"tags": [
+					"Archivematica - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Integrações aptas encontradas"
+					},
+					"400": {
+						"description": "Integrações aptas não encontradas"
+					}
+				}
+			}
+		},
+		"/api/v2/archivematica/": {
+			"get": {
+				"summary": "Busca os detalhes de uma integracao",
+				"description": " __Busca os detalhes de uma integracao__ \n\n  __-__ Este End-Point recebe como parâmetro certas informações para realizar uma busca mais dinâmica. ",
+				"tags": [
+					"Archivematica - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"nome": "id",
+						"in": "query",
+						"description": "Id do Arquivo",
+						"type": "integer",
+						"required": false
+					},
+					{
+						"name": "dtInicial",
+						"in": "query",
+						"description": "2023-01-01 - (ano-mês-dia) deve ser mais antiga que a data final.",
+						"type": "string",
+						"required": false
+					},
+					{
+						"name": "dtFinal",
+						"in": "query",
+						"description": "2023-02-01 - (ano-mês-dia) deve ser mais recente que a data inicial.",
+						"type": "string",
+						"required": false
+					},
+					{
+						"name": "status",
+						"in": "query",
+						"description": "Status (0 - Cancelado / 1 - Aguardando / 2 - Confirmado / 3 - Sincronizando / 4 - Concluído / 5 - Falha), status possíveis de uma Integração",
+						"type": "integer",
+						"required": false
+					},
+					{
+						"name": "id_usuario",
+						"in": "query",
+						"description": "Id do usuário que criou a integração",
+						"type": "integer",
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Integracao localizada"
+					},
+					"400": {
+						"description": "Erro ao Consultar Integração"
+					}
+				}
+			}
+		},
+		"/api/v2/archivematica/sync": {
+			"get": {
+				"summary": "Inicia uma sincronização",
+				"description": "  __Inicia uma sincronização__ \n\n __-__       Este End-Point requer apenas o token de autenticação.",
+				"tags": [
+					"Archivematica - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Sincronização iniciada"
+					}
+				}
+			}
+		},
+		"/api/v2/archivematica/ ": {
+			"post": {
+				"summary": "Cria nova integração",
+				"description": "__Cria nova integração__ \n\n   __-__       Este End-Point recebe como parâmetro uma array/lista de itens que são diplomas aptos para a integração. \n\n __-__       O valor informado deve ser o ID do diploma apto.",
+				"tags": [
+					"Archivematica - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"arrayAptos": {
+										"type": "array",
+										"items": {
+											"type": "integer"
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Nova integração criada com sucesso"
+					},
+					"400": {
+						"description": "Houve um erro ao criar a integração"
+					}
+				}
+			}
+		},
+		"/api/v2/archivematica/send": {
+			"post": {
+				"summary": "Envia integração para o Archivematica",
+				"description": " __Enviar Integração para o Archivematica.__  \n\n __1. 'id':__      Id da integração que será enviada para Archivematica \n\n \n\nA integração deve estar no status confirmado para ser enviada.",
+				"tags": [
+					"Archivematica - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Integração enviada para o Archivematica"
+					},
+					"400": {
+						"description": "Erro ao tentar integração"
+					}
+				}
+			}
+		},
+		"/api/v2/archivematica/update/item": {
+			"put": {
+				"summary": "Altera itens de integração",
+				"description": " __Altera itens da integração__ \n\n   __-__       Este End-Point recebe como parâmetro uma array/lista de itens que serão modificados.  ",
+				"tags": [
+					"Archivematica - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"itens": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "integer",
+													"example": 1
+												},
+												"titulo": {
+													"type": "string",
+													"example": "Titulo"
+												},
+												"criador": {
+													"type": "string",
+													"example": "Nome do criador"
+												},
+												"descricao": {
+													"type": "string",
+													"example": "Descrição"
+												},
+												"data_arquivo": {
+													"type": "string",
+													"example": "2023-01-01"
+												},
+												"identificador": {
+													"type": "string",
+													"example": "Identificador"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Alteração nos itens realizada"
+					},
+					"400": {
+						"description": "Erro ao atualizar os itens"
+					}
+				}
+			}
+		},
+		"/api/v2/archivematica/confirm": {
+			"put": {
+				"summary": "Confirma uma Integração",
+				"description": "  __Confirma uma Integracao__ \n\n  __-__      ID da integração que será confirmada",
+				"tags": [
+					"Archivematica - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Integração confirmada com sucesso."
+					},
+					"400": {
+						"description": "Houve um erro ao confirmar a integração"
+					}
+				}
+			}
+		},
+		"/api/v2/archivematica/confirm/item": {
+			"put": {
+				"summary": "Confirma integração",
+				"description": " __Confirmar Integração.__ \n\n  \n\nID do item específico de uma integração para confirmar individualmente. \n\n              \n\nApenas itens com status 'Aguardando' podem ser Confirmados ",
+				"tags": [
+					"Archivematica - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Integração confirmada com sucesso."
+					},
+					"400": {
+						"description": "Houve um erro ao confirmar a integração"
+					}
+				}
+			}
+		},
+		"/api/v2/archivematica/reabrir": {
+			"put": {
+				"summary": "Reabre uma integração",
+				"description": " __Reabre uma integração__ \n\n __-__     ID específico para reabrir uma integração. \n\n __-__     Apenas integrações no status 'Confirmado' podem ser reabertos.",
+				"tags": [
+					"Archivematica - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Integração reaberta com sucesso."
+					},
+					"400": {
+						"description": "Houve um erro ao reabrir a integração."
+					}
+				}
+			}
+		},
+		"/api/v2/archivematica/reabrir/item": {
+			"put": {
+				"summary": "Reabrir um único item",
+				"description": " __Reabrir um único item__ \n\n  __-__ Apenas itens no status 'Confirmado' podem ser reabertos.",
+				"tags": [
+					"Archivematica - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Item reaberto com sucesso"
+					},
+					"400": {
+						"description": "Houve um erro ao reabrir um item"
+					}
+				}
+			}
+		},
+		"/api/v2/archivematica/cancelar": {
+			"put": {
+				"summary": "Cancela uma integração",
+				"description": " __Cancela uma Integração__ \n\n __-__ ID da integração que será cancelada.",
+				"tags": [
+					"Archivematica - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Item cancelado."
+					},
+					"400": {
+						"description": "Houve um erro ao cancelar o item"
+					}
+				}
+			}
+		},
+		"/api/v2/curriculos": {
+			"get": {
+				"summary": "Busca os dados dos currículos cadastrados",
+				"description": " Busca os dados dos currículos cadastrados",
+				"tags": [
+					"Currículos - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "descricao",
+						"in": "query",
+						"description": "Descrição",
+						"type": "string",
+						"required": false
+					},
+					{
+						"name": "status",
+						"in": "query",
+						"description": "Status (0 - Concluído / 1 - Aguardando Confirmação / 2 - Confirmado / 3 - Gerado / 4 - Enviado para Assinatura / 5 - Cancelado / 6 - Cancelado no Asten Assinatura)",
+						"type": "string",
+						"required": false
+					},
+					{
+						"name": "id_repositorio",
+						"in": "query",
+						"description": "Id do repositório",
+						"type": "integer",
+						"required": false
+					},
+					{
+						"name": "dt_inicio",
+						"in": "query",
+						"description": "Data de início",
+						"type": "string",
+						"required": false
+					},
+					{
+						"name": "dt_fim",
+						"in": "query",
+						"description": "Data de fim",
+						"type": "string",
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Currículo não localizado."
+					},
+					"400": {
+						"description": "Erro ao consultar currículos."
+					}
+				}
+			},
+			"post": {
+				"summary": "Cria um currículo com as informações principais",
+				"description": "Cria um currículo com as informações principais.",
+				"tags": [
+					"Currículos - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+									  "type": "integer",
+									  "exemple": 11
+									},
+									"descricao": {
+									  "type": "string",
+									  "exemple": "Sistemas de Informação 2014"
+									},
+									"codigo": {
+									  "type": "string",
+									  "example": "SI2014"
+									},
+									"id_repositorio": {
+									  "type": "integer",
+									  "example": 11
+									},
+									"dt_aprovacao": {
+									  "type": "string",
+									  "example": "1970-01-01"
+									},
+									"minutos_relogio": {
+									  "type": "integer",
+									  "example": 50
+									},
+									"nome_areas": {
+									  "type": "string",
+									  "example": "Áreas de ensino"
+									},
+									"programa_educacional": {
+									  "type": "string",
+									  "example": "Engenharias 2014"
+									},
+									"inf_adicionais": {
+									  "type": "string",
+									  "example": "Informações Adicionais"
+									},
+									"Instituicao": {
+									  "type": "object",
+									  "properties": {
+										"nome": {
+										  "type": "string",
+										  "example": "Universidade Estadual de Santa Maria"
+										},
+										"codigo_emec": {
+										  "type": "string",
+										  "example": "50123"
+										},
+										"cnpj": {
+										  "type": "string",
+										  "example": "30407415000145"
+										},
+										"Endereco": {
+										  "type": "object",
+										  "properties": {
+											"logradouro": {
+											  "type": "string",
+											  "example": "Rua das Flores"
+											},
+											"numero": {
+											  "type": "string",
+											  "example": "1470"
+											},
+											"complemento": {
+											  "type": "string",
+											  "example": "Esquina"
+											},
+											"bairro": {
+											  "type": "string",
+											  "example": "Centro"
+											},
+											"cod_municipio": {
+											  "type": "integer",
+											  "example": 1234567
+											},
+											"nome_municipio": {
+											  "type": "string",
+											  "example": "Santa Maria"
+											},
+											"UF": {
+											  "type": "string",
+											  "example": "Sigla da UF"
+											},
+											"CEP": {
+											  "type": "string",
+											  "example": "CEP (Sem pontos ou traços)"
+											}
+										  }
+										},
+										"Credenciamento": {
+										  "type": "object",
+										  "properties": {
+											"tipo": {
+											  "type": "string",
+											  "example": "(Parecer, Resolução, Decreto, Portaria)"
+											},
+											"numero_ato": {
+											  "type": "string",
+											  "example": "12345 ou S/N"
+											},
+											"data": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"tramitacao_emec": {
+											  "type": "object",
+											  "properties": {
+												"tipo": {
+												  "type": "string",
+												  "example": "(Parecer, Resolução, Decreto, Portaria)"
+												},
+												"numero": {
+												  "type": "string",
+												  "example": "12345 ou S/N"
+												},
+												"data_cadastro": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												},
+												"data_protocolo": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												}
+											  }
+											},
+											"veiculo_publicacao": {
+											  "type": "string",
+											  "example": "D.O.U."
+											},
+											"data_publicacao": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"secao_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"pagina_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"numero_dou": {
+											  "type": "string",
+											  "example": "50123"
+											}
+										  }
+										},
+										"Recerenciamento": {
+										  "type": "object",
+										  "properties": {
+											"tipo": {
+											  "type": "string",
+											  "example": "(Parecer, Resolução, Decreto, Portaria)"
+											},
+											"numero_ato": {
+											  "type": "string",
+											  "example": "12345 ou S/N"
+											},
+											"data": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"tramitacao_emec": {
+											  "type": "object",
+											  "properties": {
+												"tipo": {
+												  "type": "string",
+												  "example": "(Parecer, Resolução, Decreto, Portaria)"
+												},
+												"numero": {
+												  "type": "string",
+												  "example": "12345 ou S/N"
+												},
+												"data_cadastro": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												},
+												"data_protocolo": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												}
+											  }
+											},
+											"veiculo_publicacao": {
+											  "type": "string",
+											  "example": "D.O.U."
+											},
+											"data_publicacao": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"secao_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"pagina_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"numero_dou": {
+											  "type": "string",
+											  "example": "50123"
+											}
+										  }
+										},
+										"RenovacaoRecredenciamento": {
+										  "type": "object",
+										  "properties": {
+											"tipo": {
+											  "type": "string",
+											  "example": "(Parecer, Resolução, Decreto, Portaria)"
+											},
+											"numero_ato": {
+											  "type": "string",
+											  "example": "12345 ou S/N"
+											},
+											"data": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"tramitacao_emec": {
+											  "type": "object",
+											  "properties": {
+												"tipo": {
+												  "type": "string",
+												  "example": "(Parecer, Resolução, Decreto, Portaria)"
+												},
+												"numero": {
+												  "type": "string",
+												  "example": "12345 ou S/N"
+												},
+												"data_cadastro": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												},
+												"data_protocolo": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												}
+											  }
+											},
+											"veiculo_publicacao": {
+											  "type": "string",
+											  "example": "D.O.U."
+											},
+											"data_publicacao": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"secao_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"pagina_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"numero_dou": {
+											  "type": "string",
+											  "example": "50123"
+											}
+										  }
+										}
+									  }
+									},
+									"Curso": {
+									  "type": "object",
+									  "properties": {
+										"nome": {
+										  "type": "string",
+										  "example": "Sistemas de Informação"
+										},
+										"codigo_emec": {
+										  "type": "string",
+										  "example": "50123"
+										},
+										"Habilitacoes": {
+										  "type": "array",
+										  "items": {
+											"type": "object",
+											"properties": {
+											  "nome": {
+												"type": "string",
+												"example": "Bacharel"
+											  },
+											  "data": {
+												"type": "string",
+												"example": "1970-01-01"
+											  }
+											}
+										  }
+										},
+										"Autorizacao": {
+										  "type": "object",
+										  "properties": {
+											"tipo": {
+											  "type": "string",
+											  "example": "(Parecer, Resolução, Decreto, Portaria)"
+											},
+											"numero_ato": {
+											  "type": "string",
+											  "example": "12345 ou S/N"
+											},
+											"data": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"tramitacao_emec": {
+											  "type": "object",
+											  "properties": {
+												"tipo": {
+												  "type": "string",
+												  "example": "(Parecer, Resolução, Decreto, Portaria)"
+												},
+												"numero": {
+												  "type": "string",
+												  "example": "12345 ou S/N"
+												},
+												"data_cadastro": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												},
+												"data_protocolo": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												}
+											  }
+											},
+											"veiculo_publicacao": {
+											  "type": "string",
+											  "example": "D.O.U."
+											},
+											"data_publicacao": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"secao_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"pagina_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"numero_dou": {
+											  "type": "string",
+											  "example": "50123"
+											}
+										  }
+										},
+										"Reconhecimento": {
+										  "type": "object",
+										  "properties": {
+											"tipo": {
+											  "type": "string",
+											  "example": "(Parecer, Resolução, Decreto, Portaria)"
+											},
+											"numero_ato": {
+											  "type": "string",
+											  "example": "12345 ou S/N"
+											},
+											"data": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"tramitacao_emec": {
+											  "type": "object",
+											  "properties": {
+												"tipo": {
+												  "type": "string",
+												  "example": "(Parecer, Resolução, Decreto, Portaria)"
+												},
+												"numero": {
+												  "type": "string",
+												  "example": "12345 ou S/N"
+												},
+												"data_cadastro": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												},
+												"data_protocolo": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												}
+											  }
+											},
+											"veiculo_publicacao": {
+											  "type": "string",
+											  "example": "D.O.U."
+											},
+											"data_publicacao": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"secao_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"pagina_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"numero_dou": {
+											  "type": "string",
+											  "example": "50123"
+											}
+										  }
+										},
+										"Renovacao": {
+										  "type": "object",
+										  "properties": {
+											"tipo": {
+											  "type": "string",
+											  "example": "(Parecer, Resolução, Decreto, Portaria)"
+											},
+											"numero_ato": {
+											  "type": "string",
+											  "example": "12345 ou S/N"
+											},
+											"data": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"tramitacao_emec": {
+											  "type": "object",
+											  "properties": {
+												"tipo": {
+												  "type": "string",
+												  "example": "(Parecer, Resolução, Decreto, Portaria)"
+												},
+												"numero": {
+												  "type": "string",
+												  "example": "12345 ou S/N"
+												},
+												"data_cadastro": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												},
+												"data_protocolo": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												}
+											  }
+											},
+											"veiculo_publicacao": {
+											  "type": "string",
+											  "example": "D.O.U."
+											},
+											"data_publicacao": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"secao_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"pagina_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"numero_dou": {
+											  "type": "string",
+											  "example": "50123"
+											}
+										  }
+										}
+									  }
+									},
+									"Etiquetas": {
+									  "type": "array",
+									  "items": {
+										"type": "object",
+										"properties": {
+										  "nome": {
+											"type": "string",
+											"example": "Obrigatória"
+										  },
+										  "codigo": {
+											"type": "string",
+											"example": "OB"
+										  },
+										  "aplicado_automaticamente": {
+											"type": "string",
+											"example": "Sim ou Não"
+										  }
+										}
+									  }
+									},
+									"Areas": {
+									  "type": "array",
+									  "items": {
+										"type": "object",
+										"properties": {
+										  "nome": {
+											"type": "string",
+											"example": "Engenharia de Produtos"
+										  },
+										  "codigo": {
+											"type": "string",
+											"example": "EP"
+										  }
+										}
+									  }
+									},
+									"Categorias": {
+									  "type": "array",
+									  "items": {
+										"type": "object",
+										"properties": {
+										  "nome": {
+											"type": "string",
+											"example": "Atividades de ensino"
+										  },
+										  "codigo": {
+											"type": "string",
+											"example": "Ensino"
+										  }
+										}
+									  }
+									},
+									"UnidadesCurriculares": {
+									  "type": "array",
+									  "items": {
+										"type": "object",
+										"properties": {
+										  "nome": {
+											"type": "string",
+											"example": "Lógica"
+										  },
+										  "codigo": {
+											"type": "string",
+											"example": "LG"
+										  },
+										  "tipo": {
+											"type": "string",
+											"example": "(DIS - Disciplina, MOD - Módulo, ATV - Atividade, EST - Estágio, TCC - Trabalho de Conclusão de Curso, MON - Monografia, ART - Artigo, PRJ - Projeto, PRD - Produto, ATC - Atividade Complementar, ATE - Atividade de Extensão)"
+										  },
+										  "hora_aula": {
+											"type": "integer",
+											"example": 50
+										  },
+										  "hora_aula_relogio": {
+											"type": "integer",
+											"example": 60
+										  },
+										  "ementa": {
+											"type": "array",
+											"items": {
+											  "type": "object",
+											  "properties": {
+												"ItemEmenta": {
+												  "type": "string",
+												  "example": "Introdução sobre o funcionamento do sistema visual humano"
+												}
+											  }
+											}
+										  },
+										  "fase": {
+											"type": "string",
+											"example": "1"
+										  },
+										  "pre_requisitos": {
+											"type": "array",
+											"items": {
+											  "type": "object",
+											  "properties": {
+												"nome": {
+												  "type": "string",
+												  "example": "Introdução à Informática"
+												},
+												"codigo": {
+												  "type": "string",
+												  "example": "II"
+												}
+											  }
+											}
+										  },
+										  "etiquetas": {
+											"type": "array",
+											"items": {
+											  "type": "object",
+											  "properties": {
+												"codigo": {
+												  "type": "string",
+												  "example": "ob"
+												}
+											  }
+											}
+										  },
+										  "areas": {
+											"type": "array",
+											"items": {
+											  "type": "object",
+											  "properties": {
+												"codigo": {
+												  "type": "string",
+												  "example": "EP"
+												}
+											  }
+											}
+										  },
+										  "equivalencias": {
+											"type": "array",
+											"items": {
+											  "type": "object",
+											  "properties": {
+												"nome": {
+												  "type": "string",
+												  "example": "Introdução à Informática"
+												},
+												"unidades": {
+												  "type": "array",
+												  "items": {
+													"type": "string",
+													"example": "IHC"
+												  }
+												}
+											  }
+											}
+										  }
+										}
+									  }
+									},
+									"Criterios": {
+									  "type": "array",
+									  "items": {
+										"type": "object",
+										"properties": {
+										  "tipo": {
+											"type": "string",
+											"example": "Rotulos ou Expressao"
+										  },
+										  "codigo": {
+											"type": "string",
+											"example": "r1ob"
+										  },
+										  "tipo_unidade": {
+											"type": "string",
+											"example": "(DIS - Disciplina, MOD - Módulo, ATV - Atividade, EST - Estágio, TCC - Trabalho de Conclusão de Curso, MON - Monografia, ART - Artigo, PRJ - Projeto, PRD - Produto, ATC - Atividade Complementar, ATE - Atividade de Extensão)"
+										  },
+										  "criterios": {
+											"type": "array",
+											"items": {
+											  "type": "string",
+											  "example": "ca"
+											}
+										  },
+										  "etiquetas": {
+											"type": "array",
+											"items": {
+											  "type": "string",
+											  "example": "ob"
+											}
+										  },
+										  "carga_maxima": {
+											"type": "integer",
+											"example": 100
+										  },
+										  "carga_minima": {
+											"type": "integer",
+											"example": 100
+										  },
+										  "carga_totalizacao": {
+											"type": "integer",
+											"example": 100
+										  }
+										}
+									  }
+									}
+								  }
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Curriculo criado com sucesso"
+					},
+					"400": {
+						"description": "Erro ao cadastrar Currículo"
+					}
+				}
+			},
+			"put": {
+				"summary": "Altera um currículo com as informações detalhadas",
+				"description": "Altera um currículo com as informações detalhadas.",
+				"tags": [
+					"Currículos - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+									  "type": "integer",
+									  "exemple": 11
+									},
+									"descricao": {
+									  "type": "string",
+									  "exemple": "Sistemas de Informação 2014"
+									},
+									"codigo": {
+									  "type": "string",
+									  "example": "SI2014"
+									},
+									"id_repositorio": {
+									  "type": "integer",
+									  "example": 11
+									},
+									"dt_aprovacao": {
+									  "type": "string",
+									  "example": "1970-01-01"
+									},
+									"minutos_relogio": {
+									  "type": "integer",
+									  "example": 50
+									},
+									"nome_areas": {
+									  "type": "string",
+									  "example": "Áreas de ensino"
+									},
+									"programa_educacional": {
+									  "type": "string",
+									  "example": "Engenharias 2014"
+									},
+									"inf_adicionais": {
+									  "type": "string",
+									  "example": "Informações Adicionais"
+									},
+									"Instituicao": {
+									  "type": "object",
+									  "properties": {
+										"nome": {
+										  "type": "string",
+										  "example": "Universidade Estadual de Santa Maria"
+										},
+										"codigo_emec": {
+										  "type": "string",
+										  "example": "50123"
+										},
+										"cnpj": {
+										  "type": "string",
+										  "example": "30407415000145"
+										},
+										"Endereco": {
+										  "type": "object",
+										  "properties": {
+											"logradouro": {
+											  "type": "string",
+											  "example": "Rua das Flores"
+											},
+											"numero": {
+											  "type": "string",
+											  "example": "1470"
+											},
+											"complemento": {
+											  "type": "string",
+											  "example": "Esquina"
+											},
+											"bairro": {
+											  "type": "string",
+											  "example": "Centro"
+											},
+											"cod_municipio": {
+											  "type": "integer",
+											  "example": 1234567
+											},
+											"nome_municipio": {
+											  "type": "string",
+											  "example": "Santa Maria"
+											},
+											"UF": {
+											  "type": "string",
+											  "example": "Sigla da UF"
+											},
+											"CEP": {
+											  "type": "string",
+											  "example": "CEP (Sem pontos ou traços)"
+											}
+										  }
+										},
+										"Credenciamento": {
+										  "type": "object",
+										  "properties": {
+											"tipo": {
+											  "type": "string",
+											  "example": "(Parecer, Resolução, Decreto, Portaria)"
+											},
+											"numero_ato": {
+											  "type": "string",
+											  "example": "12345 ou S/N"
+											},
+											"data": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"tramitacao_emec": {
+											  "type": "object",
+											  "properties": {
+												"tipo": {
+												  "type": "string",
+												  "example": "(Parecer, Resolução, Decreto, Portaria)"
+												},
+												"numero": {
+												  "type": "string",
+												  "example": "12345 ou S/N"
+												},
+												"data_cadastro": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												},
+												"data_protocolo": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												}
+											  }
+											},
+											"veiculo_publicacao": {
+											  "type": "string",
+											  "example": "D.O.U."
+											},
+											"data_publicacao": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"secao_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"pagina_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"numero_dou": {
+											  "type": "string",
+											  "example": "50123"
+											}
+										  }
+										},
+										"Recerenciamento": {
+										  "type": "object",
+										  "properties": {
+											"tipo": {
+											  "type": "string",
+											  "example": "(Parecer, Resolução, Decreto, Portaria)"
+											},
+											"numero_ato": {
+											  "type": "string",
+											  "example": "12345 ou S/N"
+											},
+											"data": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"tramitacao_emec": {
+											  "type": "object",
+											  "properties": {
+												"tipo": {
+												  "type": "string",
+												  "example": "(Parecer, Resolução, Decreto, Portaria)"
+												},
+												"numero": {
+												  "type": "string",
+												  "example": "12345 ou S/N"
+												},
+												"data_cadastro": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												},
+												"data_protocolo": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												}
+											  }
+											},
+											"veiculo_publicacao": {
+											  "type": "string",
+											  "example": "D.O.U."
+											},
+											"data_publicacao": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"secao_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"pagina_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"numero_dou": {
+											  "type": "string",
+											  "example": "50123"
+											}
+										  }
+										},
+										"RenovacaoRecredenciamento": {
+										  "type": "object",
+										  "properties": {
+											"tipo": {
+											  "type": "string",
+											  "example": "(Parecer, Resolução, Decreto, Portaria)"
+											},
+											"numero_ato": {
+											  "type": "string",
+											  "example": "12345 ou S/N"
+											},
+											"data": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"tramitacao_emec": {
+											  "type": "object",
+											  "properties": {
+												"tipo": {
+												  "type": "string",
+												  "example": "(Parecer, Resolução, Decreto, Portaria)"
+												},
+												"numero": {
+												  "type": "string",
+												  "example": "12345 ou S/N"
+												},
+												"data_cadastro": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												},
+												"data_protocolo": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												}
+											  }
+											},
+											"veiculo_publicacao": {
+											  "type": "string",
+											  "example": "D.O.U."
+											},
+											"data_publicacao": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"secao_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"pagina_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"numero_dou": {
+											  "type": "string",
+											  "example": "50123"
+											}
+										  }
+										}
+									  }
+									},
+									"Curso": {
+									  "type": "object",
+									  "properties": {
+										"nome": {
+										  "type": "string",
+										  "example": "Sistemas de Informação"
+										},
+										"codigo_emec": {
+										  "type": "string",
+										  "example": "50123"
+										},
+										"Habilitacoes": {
+										  "type": "array",
+										  "items": {
+											"type": "object",
+											"properties": {
+											  "nome": {
+												"type": "string",
+												"example": "Bacharel"
+											  },
+											  "data": {
+												"type": "string",
+												"example": "1970-01-01"
+											  }
+											}
+										  }
+										},
+										"Autorizacao": {
+										  "type": "object",
+										  "properties": {
+											"tipo": {
+											  "type": "string",
+											  "example": "(Parecer, Resolução, Decreto, Portaria)"
+											},
+											"numero_ato": {
+											  "type": "string",
+											  "example": "12345 ou S/N"
+											},
+											"data": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"tramitacao_emec": {
+											  "type": "object",
+											  "properties": {
+												"tipo": {
+												  "type": "string",
+												  "example": "(Parecer, Resolução, Decreto, Portaria)"
+												},
+												"numero": {
+												  "type": "string",
+												  "example": "12345 ou S/N"
+												},
+												"data_cadastro": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												},
+												"data_protocolo": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												}
+											  }
+											},
+											"veiculo_publicacao": {
+											  "type": "string",
+											  "example": "D.O.U."
+											},
+											"data_publicacao": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"secao_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"pagina_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"numero_dou": {
+											  "type": "string",
+											  "example": "50123"
+											}
+										  }
+										},
+										"Reconhecimento": {
+										  "type": "object",
+										  "properties": {
+											"tipo": {
+											  "type": "string",
+											  "example": "(Parecer, Resolução, Decreto, Portaria)"
+											},
+											"numero_ato": {
+											  "type": "string",
+											  "example": "12345 ou S/N"
+											},
+											"data": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"tramitacao_emec": {
+											  "type": "object",
+											  "properties": {
+												"tipo": {
+												  "type": "string",
+												  "example": "(Parecer, Resolução, Decreto, Portaria)"
+												},
+												"numero": {
+												  "type": "string",
+												  "example": "12345 ou S/N"
+												},
+												"data_cadastro": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												},
+												"data_protocolo": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												}
+											  }
+											},
+											"veiculo_publicacao": {
+											  "type": "string",
+											  "example": "D.O.U."
+											},
+											"data_publicacao": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"secao_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"pagina_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"numero_dou": {
+											  "type": "string",
+											  "example": "50123"
+											}
+										  }
+										},
+										"Renovacao": {
+										  "type": "object",
+										  "properties": {
+											"tipo": {
+											  "type": "string",
+											  "example": "(Parecer, Resolução, Decreto, Portaria)"
+											},
+											"numero_ato": {
+											  "type": "string",
+											  "example": "12345 ou S/N"
+											},
+											"data": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"tramitacao_emec": {
+											  "type": "object",
+											  "properties": {
+												"tipo": {
+												  "type": "string",
+												  "example": "(Parecer, Resolução, Decreto, Portaria)"
+												},
+												"numero": {
+												  "type": "string",
+												  "example": "12345 ou S/N"
+												},
+												"data_cadastro": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												},
+												"data_protocolo": {
+												  "type": "string",
+												  "example": "1970-01-01"
+												}
+											  }
+											},
+											"veiculo_publicacao": {
+											  "type": "string",
+											  "example": "D.O.U."
+											},
+											"data_publicacao": {
+											  "type": "string",
+											  "example": "1970-01-01"
+											},
+											"secao_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"pagina_publicacao": {
+											  "type": "string",
+											  "example": "50123"
+											},
+											"numero_dou": {
+											  "type": "string",
+											  "example": "50123"
+											}
+										  }
+										}
+									  }
+									},
+									"Etiquetas": {
+									  "type": "array",
+									  "items": {
+										"type": "object",
+										"properties": {
+										  "nome": {
+											"type": "string",
+											"example": "Obrigatória"
+										  },
+										  "codigo": {
+											"type": "string",
+											"example": "OB"
+										  },
+										  "aplicado_automaticamente": {
+											"type": "string",
+											"example": "Sim ou Não"
+										  }
+										}
+									  }
+									},
+									"Areas": {
+									  "type": "array",
+									  "items": {
+										"type": "object",
+										"properties": {
+										  "nome": {
+											"type": "string",
+											"example": "Engenharia de Produtos"
+										  },
+										  "codigo": {
+											"type": "string",
+											"example": "EP"
+										  }
+										}
+									  }
+									},
+									"Categorias": {
+									  "type": "array",
+									  "items": {
+										"type": "object",
+										"properties": {
+										  "nome": {
+											"type": "string",
+											"example": "Atividades de ensino"
+										  },
+										  "codigo": {
+											"type": "string",
+											"example": "Ensino"
+										  }
+										}
+									  }
+									},
+									"UnidadesCurriculares": {
+									  "type": "array",
+									  "items": {
+										"type": "object",
+										"properties": {
+										  "nome": {
+											"type": "string",
+											"example": "Lógica"
+										  },
+										  "codigo": {
+											"type": "string",
+											"example": "LG"
+										  },
+										  "tipo": {
+											"type": "string",
+											"example": "(DIS - Disciplina, MOD - Módulo, ATV - Atividade, EST - Estágio, TCC - Trabalho de Conclusão de Curso, MON - Monografia, ART - Artigo, PRJ - Projeto, PRD - Produto, ATC - Atividade Complementar, ATE - Atividade de Extensão)"
+										  },
+										  "hora_aula": {
+											"type": "integer",
+											"example": 50
+										  },
+										  "hora_aula_relogio": {
+											"type": "integer",
+											"example": 60
+										  },
+										  "ementa": {
+											"type": "array",
+											"items": {
+											  "type": "object",
+											  "properties": {
+												"ItemEmenta": {
+												  "type": "string",
+												  "example": "Introdução sobre o funcionamento do sistema visual humano"
+												}
+											  }
+											}
+										  },
+										  "fase": {
+											"type": "string",
+											"example": "1"
+										  },
+										  "pre_requisitos": {
+											"type": "array",
+											"items": {
+											  "type": "object",
+											  "properties": {
+												"nome": {
+												  "type": "string",
+												  "example": "Introdução à Informática"
+												},
+												"codigo": {
+												  "type": "string",
+												  "example": "II"
+												}
+											  }
+											}
+										  },
+										  "etiquetas": {
+											"type": "array",
+											"items": {
+											  "type": "object",
+											  "properties": {
+												"codigo": {
+												  "type": "string",
+												  "example": "ob"
+												}
+											  }
+											}
+										  },
+										  "areas": {
+											"type": "array",
+											"items": {
+											  "type": "object",
+											  "properties": {
+												"codigo": {
+												  "type": "string",
+												  "example": "EP"
+												}
+											  }
+											}
+										  },
+										  "equivalencias": {
+											"type": "array",
+											"items": {
+											  "type": "object",
+											  "properties": {
+												"nome": {
+												  "type": "string",
+												  "example": "Introdução à Informática"
+												},
+												"unidades": {
+												  "type": "array",
+												  "items": {
+													"type": "string",
+													"example": "IHC"
+												  }
+												}
+											  }
+											}
+										  }
+										}
+									  }
+									},
+									"Criterios": {
+									  "type": "array",
+									  "items": {
+										"type": "object",
+										"properties": {
+										  "tipo": {
+											"type": "string",
+											"example": "Rotulos ou Expressao"
+										  },
+										  "codigo": {
+											"type": "string",
+											"example": "r1ob"
+										  },
+										  "tipo_unidade": {
+											"type": "string",
+											"example": "(DIS - Disciplina, MOD - Módulo, ATV - Atividade, EST - Estágio, TCC - Trabalho de Conclusão de Curso, MON - Monografia, ART - Artigo, PRJ - Projeto, PRD - Produto, ATC - Atividade Complementar, ATE - Atividade de Extensão)"
+										  },
+										  "criterios": {
+											"type": "array",
+											"items": {
+											  "type": "string",
+											  "example": "ca"
+											}
+										  },
+										  "etiquetas": {
+											"type": "array",
+											"items": {
+											  "type": "string",
+											  "example": "ob"
+											}
+										  },
+										  "carga_maxima": {
+											"type": "integer",
+											"example": 100
+										  },
+										  "carga_minima": {
+											"type": "integer",
+											"example": 100
+										  },
+										  "carga_totalizacao": {
+											"type": "integer",
+											"example": 100
+										  }
+										}
+									  }
+									}
+								  }
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Curriculo alterado com sucesso"
+					},
+					"400": {
+						"description": "Erro ao alterar Currículo"
+					}
+				}
+			}
+		},
+		"/api/v2/archivematica/detalhes": {
+			"get": {
+				"summary": "Busca os dados de um integração específica",
+				"description": " Busca os dados de um integração específico",
+				"tags": [
+					"Archivematica - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "Id do currículo",
+						"type": "integer",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Currículo  localizado."
+					},
+					"400": {
+						"description": " Erro ao consultar Currículos "
+					}
+				}
+			}
+		},
+		"/api/v2/curriculos/confirmar": {
+			"post": {
+				"summary": "Confirma os dados de um currículo",
+				"description": "Confirma os dados de um currículo",
+				"tags": [
+					"Currículos - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11,
+										"description": "Id do curriculo"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Currículo confirmado com sucesso"
+					},
+					"400": {
+						"description": "Erro ao confirmar Currículo"
+					}
+				}
+			}
+		},
+		"/api/v2/curriculos/reabrir": {
+			"post": {
+				"summary": "Reabre um currículo",
+				"description": "Reabre um currículo",
+				"tags": [
+					"Currículos - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11,
+										"description": "Id do curriculo"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Currículo reaberto com sucesso"
+					},
+					"400": {
+						"description": "Erro ao reabrir Currículo"
+					}
+				}
+			}
+		},
+		"/api/v2/curriculos/gerar": {
+			"post": {
+				"summary": "Gera os arquivos XML e PDF de um currículo",
+				"description": "Gera os arquivos XML e PDF de um currículo",
+				"tags": [
+					"Currículos - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11,
+										"description": "Id do curriculo"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Arquivos do currículo gerados com sucesso"
+					},
+					"400": {
+						"description": "Erro ao gerar arquivos do Currículo"
+					}
+				}
+			}
+		},
+		"/api/v2/curriculos/docs": {
+			"post": {
+				"summary": "Download dos arquivos de currículo",
+				"description": "Download dos arquivos do currículo",
+				"tags": [
+					"Currículos - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11,
+										"description": "Id do curriculo"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Download efetuado com sucesso"
+					},
+					"400": {
+						"description": "Erro ao baixar arquivos"
+					}
+				}
+			}
+		},
+		"/api/v2/curriculos/assinar": {
+			"post": {
+				"summary": "Envia um currículo para assinatura",
+				"description": "Envia um currículo para assinatura",
+				"tags": [
+					"Currículos - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11,
+										"description": "Id do curriculo"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Currículo enviado para assinatura com sucesso"
+					},
+					"400": {
+						"description": "Erro ao enviar Currículo para assinatura"
+					}
+				}
+			}
+		},
+		"/api/v2/curriculos/cancelar": {
+			"post": {
+				"summary": "Cancela um currículo",
+				"description": "Cancela um currículo",
+				"tags": [
+					"Currículos - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "integer",
+										"example": 11,
+										"description": "Id do curriculo"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": " Currículo cancelado com sucesso"
+					},
+					"400": {
+						"description": "Erro ao cancelar Currículo"
+					}
+				}
+			}
+		},
+		"/api/validardados": {
+			"post": {
+				"summary": " Valida dados de importação",
+				"description": "Valida dados de importação",
+				"tags": [
+					"Currículos - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"data": {
+										"type": "object"
+
+									},
+									"descricao": {
+										"type": "string",
+										"example": "Pacote importado"
+									},
+									"id_repositorio": {
+										"type": "integer",
+										"example": 11
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": " Currículo cancelado com sucesso"
+					},
+					"400": {
+						"description": "Erro ao cancelar Currículo"
+					}
+				}
+			}
+		},
+		"/api/inserirpacote": {
+			"post": {
+				"summary": "Insere pacote de diplomas",
+				"description": "Insere pacote de diplomas",
+				"tags": [
+					"Pacotes de Diploma - v1"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"data": {
+										"type": "object"
+									},
+									"descricao": {
+										"type": "string",
+										"example": "Pacote importado"
+									},
+									"id_repositorio": {
+										"type": "integer",
+										"example": 11
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": " Currículo cancelado com sucesso"
+					},
+					"400": {
+						"description": "Erro ao cancelar Currículo"
+					}
+				}
+			}
+		},
+		"/api/v2/arquivos_fiscalizacao/importacao/validar": {
+			"post": {
+				"summary": "Valida dados de importação",
+				"description": "Valida dados de importação",
+				"tags": [
+					"Arquivos de Fiscalização - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"tipo": {
+										"type": "string"
+									}, 
+									"json": {
+										"type": "object"
+									}
+									
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Arquivo validado"
+					},
+					"400": {
+						"description": "Erro ao validar arquivo"
+					}
+				}
+			}
+		},
+		"/api/v2/arquivos_fiscalizacao/importacao": {
+			"post": {
+				"summary": "Valida dados de importação",
+				"description": "Valida dados de importação",
+				"tags": [
+					"Arquivos de Fiscalização - v2"
+				],
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"tipo": {
+										"type": "string"
+									}, 
+									"json": {
+										"type": "object"
+									},
+									"id_repositorio": {
+										"type": "integer"
+									},
+									"descricao": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Arquivo validado"
+					},
+					"400": {
+						"description": "Erro ao validar arquivo"
+					}
+				}
+			}
+		},
+		
+		"components": {},
+		"security": []
+	}
+}

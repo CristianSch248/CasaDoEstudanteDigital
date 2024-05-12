@@ -1,0 +1,270 @@
+{
+	"openapi": "3.0.1",
+	"info": {
+		"title": "Casa do Estudante Digital",
+		"description": "API CASA DO ESTUDANTE DIGITAL",
+		"version": "2.21.0"
+	},
+	"paths": {
+		"/api/ced/auth": {
+			"post": {
+				"tags": [ "LOGIN" ],
+				"summary": "Login",
+				"requestBody": {
+					"description": "",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"login": {
+										"type": "string",
+										"description": "Usuário"
+									},
+									"senha": {
+										"type": "string",
+										"description": "Senha"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Login Efetuado"
+					},
+					"400": {
+						"description": "Erro"
+					}
+				}
+			}
+		},
+		"/api/ced/logout": {
+			"get": {
+				"tags": [ "LOGIN" ],
+				"summary": "Login",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"responses": {
+					"200": {
+						"description": "Login Efetuado"
+					},
+					"400": {
+						"description": "Erro"
+					}
+				}
+			}
+		},
+
+        "/api/ced/usuario/new": {
+			"post": {
+				"tags": [ "USUARIOS" ],
+				"summary": "Cadastrar novo usuário",
+				"requestBody": {
+					"description": "Criar novo usuário",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"nome": {
+										"type": "string",
+										"description": "Fulano Siclano"
+									},
+									"email": {
+										"type": "string",
+										"description": "Fulano@gmail.com"
+									},
+									"senha": {
+										"type": "string",
+										"description": "ASenhaDoFulano"
+									},
+									"tipo": {
+										"type": "integer",
+										"description": "1 - aluno, 2 - prae, 3 - manutenção"
+									},
+									"telefone": {
+										"type": "string",
+										"description": "12345678901"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Cadastro Efetuado"
+					},
+					"400": {
+						"description": "Erro ao cadastrar"
+					}
+				}
+			}
+		},
+        "/api/ced/usuario/listarportipo": {
+			"get": {
+				"tags": [ "USUARIOS" ],
+				"summary": "Listar Usuários por tipo",
+                "parameters": [
+					{
+						"name": "tipo",
+						"in": "query",
+						"description": "1 - aluno, 2 - prae, 3 - manutenção",
+						"type": "integer",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Usuarios Encontrados"
+					},
+					"400": {
+						"description": "Erro ao buscar usuários"
+					}
+				}
+			}
+		},
+        "/api/ced/usuario/editar": {
+			"put": {
+				"tags": [ "USUARIOS" ],
+				"summary": "Editar usuário",
+				"requestBody": {
+					"description": "Editar usuário existente",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+                                    "id": {
+										"type": "integer",
+										"description": "id do usuários"
+									},
+									"nome": {
+										"type": "string",
+										"description": "Fulano Siclano"
+									},
+									"email": {
+										"type": "string",
+										"description": "Fulano@gmail.com"
+									},
+									"senha": {
+										"type": "string",
+										"description": "ASenhaDoFulano"
+									},
+									"tipo": {
+										"type": "integer",
+										"description": "1 - aluno, 2 - prae, 3 - manutenção"
+									},
+									"telefone": {
+										"type": "string",
+										"description": "12345678901"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Cadastro Efetuado"
+					},
+					"400": {
+						"description": "Erro ao cadastrar"
+					}
+				}
+			}
+		},
+        "/api/ced/usuario/alterar/senha": {
+			"put": {
+				"tags": [ "USUARIOS" ],
+				"summary": "Editar senha do usuário",
+				"requestBody": {
+					"description": "Editar senha do usuário existente",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+                                    "id": {
+										"type": "integer",
+										"description": "id do usuários"
+									},
+									"email": {
+										"type": "string",
+										"description": "Fulano@gmail.com"
+									},
+									"senha": {
+										"type": "string",
+										"description": "ASenhaDoFulano"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Cadastro Efetuado"
+					},
+					"400": {
+						"description": "Erro ao cadastrar"
+					}
+				}
+			}
+		},
+        "/api/ced/usuario/desativar": {
+			"patch": {
+				"tags": [ "USUARIOS" ],
+				"summary": "Desetivar usuario do sistema",
+				"requestBody": {
+					"description": "Desativa um usuario do sistema",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+                                    "id": {
+										"type": "integer",
+										"description": "id do usuários"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Cadastro Efetuado"
+					},
+					"400": {
+						"description": "Erro ao cadastrar"
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"parameters": {
+			"x-access-token": {
+				"name": "x-access-token",
+				"in": "header",
+				"description": "Token de acesso à API",
+				"required": true,
+				"type": "string"
+			},
+			"x-access-token-not-required": {
+				"name": "x-access-token",
+				"in": "header",
+				"description": "Token de acesso à API não obrigatório",
+				"required": false,
+				"type": "string"
+			}
+		}
+	}
+}

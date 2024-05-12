@@ -38,7 +38,7 @@ exports.novoUsuario = [
 
 exports.listarUsuarios = [
 	async (req, res, next) => {
-		if (!req.params.tipo) return console.log("Tipo de usuário não informado")
+		if (!req.query.tipo) return console.log("Tipo de usuário não informado")
 		const errors = await validationResult(req)
 		if (!errors.isEmpty()) return res.status(400).send(errors.array()[0].msg)		
 		next()

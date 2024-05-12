@@ -1,11 +1,11 @@
 const Usuarios = require('../repositories/Usuarios')
-const { sendResponse } = require('../js/Utils')
+const { sequelize } = require('../db')
 const jwt = require('../js/jwt')
 const bcrypt = require('bcrypt')
 
 async function novoUsuario(body){
     
-    let senhaCriptografada = senhaCriptografada = await bcrypt.hash(body.senha, 10)
+    let senhaCriptografada = await bcrypt.hash(body.senha, 10)
     
     const t = await sequelize.transaction()
     
@@ -33,8 +33,8 @@ async function novoUsuario(body){
 
 async function listarUsuarios(tipo){
     try {
-        let Usuarios = await Usuarios.findAll(['id', 'nome', 'email'], [{ where : { tipo: tipo } }])
-        return { success: true, message: Usuarios}
+        let usuarios = await Usuarios.findAll(['id', 'nome', 'email'], [{ tipo: tipo } ])
+        return { success: true, message: usuarios}
     } catch (error) {
         console.log('listarUsuarios ~ error:', error)
         return { success: false, message: 'Houve um problema ao consultar a lista de usuarios!'}

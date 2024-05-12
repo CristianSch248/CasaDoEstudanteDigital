@@ -1,9 +1,9 @@
 (async () => {
     const Sequelize = require('sequelize')
-    const database = require('./db')
+    const { sequelize } = require('./db')
 
     const env = process.env.NODE_ENV || 'development'
-    const sequelize = new Sequelize(database[env])
+    const sequelize = new Sequelize(sequelize[env])
 
     sequelize.authenticate().then(() => {
         console.log('Conexão bem-sucedida com o banco de dados.')

@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-const sequelize = require('../loadDatabase')
+const { sequelize } = require('../db')
 const Usuario = require('./Usuarios')
 const Apartamentos = require('./Apartamentos')
 
@@ -13,7 +13,7 @@ const Vistorias = sequelize.define('vistorias', {
         type: Sequelize.INTEGER,
         onDelete: 'cascade',
         references: {
-            model: Usuario.schema('public'),
+            model: 'usuarios',
             key: 'id'
         },
     },
@@ -21,7 +21,7 @@ const Vistorias = sequelize.define('vistorias', {
         type: Sequelize.INTEGER,
         onDelete: 'cascade',
         references: {
-            model: Usuario.schema('public'),
+            model: 'usuarios',
             key: 'id'
         },
     },
@@ -29,7 +29,7 @@ const Vistorias = sequelize.define('vistorias', {
         type: Sequelize.INTEGER,
         onDelete: 'cascade',
         references: {
-            model: Apartamentos.schema('public'),
+            model: 'apartamentos',
             key: 'id'
         },
     },

@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize')
-const sequelize = require('../loadDatabase')
-const Apartamentos = require('./Apartamentos')
+const { sequelize } = require('../db')
 
 const Patrimonio = sequelize.define('patrimonio', {
     id: {
@@ -12,7 +11,7 @@ const Patrimonio = sequelize.define('patrimonio', {
         type: Sequelize.INTEGER,
         onDelete: 'cascade',
         references: {
-            model: Apartamentos.schema('public'),
+            model: 'apartamentos',
             key: 'id'
         },
     },
