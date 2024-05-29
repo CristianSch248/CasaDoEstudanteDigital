@@ -53,6 +53,24 @@ async function desativarUsuario(req, res){
     }
 }
 
+async function fetchUserData(req, res){
+    try {
+
+        const authHeader = req.headers.authorization
+        if (!authHeader) return res.status(401).send('Token de autorização não fornecido')
+        
+        const token = authHeader.split(' ')[1]
+        if (!token) return res.status(401).send('Token de autorização malformado')
+            
+
+        const result = await Usuarios.fetchUserData(token)
+        sendResponse(res, result)
+    } catch (error) {
+        console.log("desativarUsuario ~ error:", error)
+        return res.status(400).send('Erro ao desativar usuário')
+    }
+}
+
 async function login(req, res){
     try {
         let body = req.body
@@ -81,6 +99,7 @@ module.exports = {
     alterarUsuario,
     alterarSenhaUsuario,
     desativarUsuario,
+    fetchUserData,
     login,
     logout
 }

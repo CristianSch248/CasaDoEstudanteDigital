@@ -4,7 +4,7 @@ exports.novoUsuario = [
 	check('nome')
 		.not()
 		.isEmpty()
-		.withMessage('Informe o seu E-mail.')
+		.withMessage('Informe o nome do usuário')
 		.bail(),
 	check('email')
 		.not()
@@ -84,6 +84,14 @@ exports.desativarUsuario = [
 		.withMessage('Usuário não informado')
 		.bail(),
 
+	async (req, res, next) => {
+		const errors = await validationResult(req)
+		if (!errors.isEmpty()) return res.status(400).send(errors.array()[0].msg)		
+		next()
+	},
+]
+
+exports.fetchUserData = [
 	async (req, res, next) => {
 		const errors = await validationResult(req)
 		if (!errors.isEmpty()) return res.status(400).send(errors.array()[0].msg)		

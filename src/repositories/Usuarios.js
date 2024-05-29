@@ -27,7 +27,7 @@ async function validateAttributes(attributes) {
 async function findAll(attributes, filters) {
 	let atributosValidados = await validateAttributes(attributes)
 	if (atributosValidados.length === 0) {
-		for (let key in ModelUsuarios.rawAttributes) {
+		for (let key in ModelUsuarios.getAttributes) {
 			atributosValidados.push(key)
 		}
 	}
@@ -47,19 +47,18 @@ async function findAll(attributes, filters) {
  * @returns { Model } Usuarios
  */
 async function findOne(attributes, filters) {
-	let atributosValidados = await validateAttributes(attributes)
-	if (atributosValidados.length === 0) {
-		for (let key in ModelUsuarios.rawAttributes) {
-			atributosValidados.push(key)
-		}
-	}
+    let atributosValidados = await validateAttributes(attributes)
+    if (atributosValidados.length === 0) {
+        for (let key in ModelUsuarios.getAttributes) {
+            atributosValidados.push(key)
+        }
+    }
 
-	let Usuario = await ModelUsuarios.findOne({
-		attributes: atributosValidados,
-		where: filters
-	})
-
-	return Usuario
+    let Usuario = await ModelUsuarios.findOne({
+        attributes: atributosValidados,
+        where: filters
+    })
+    return Usuario
 }
 
 /**
@@ -71,7 +70,7 @@ async function findOne(attributes, filters) {
 async function create(Usuario, transaction) {
 	let attributes = []
 
-	for (let key in Usuario.rawAttributes) {
+	for (let key in Usuario) {
 		attributes.push(key)
 	}
 

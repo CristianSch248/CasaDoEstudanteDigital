@@ -9,6 +9,7 @@ routes.get('/usuario/listarportipo', validators.listarUsuarios, controller.lista
 routes.put('/usuario/editar', validators.alterarUsuario, controller.alterarUsuario)
 routes.put('/usuario/alterar/senha', validators.alterarSenhaUsuario, controller.alterarSenhaUsuario)
 routes.patch('/usuario/desativar', validators.desativarUsuario, controller.desativarUsuario)
+routes.get('/user/data', validators.fetchUserData, controller.fetchUserData)
 
 routes.post('/auth', validators.login, controller.login)
 routes.post('/logout', jwt.verifyJWT, validators.logout, controller.logout)

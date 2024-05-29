@@ -17,7 +17,7 @@
 							"schema": {
 								"type": "object",
 								"properties": {
-									"login": {
+									"email": {
 										"type": "string",
 										"description": "Usuário"
 									},
@@ -41,7 +41,7 @@
 			}
 		},
 		"/api/ced/logout": {
-			"get": {
+			"post": {
 				"tags": [ "LOGIN" ],
 				"summary": "Login",
                 "parameters": [
@@ -65,6 +65,12 @@
 			"post": {
 				"tags": [ "USUARIOS" ],
 				"summary": "Cadastrar novo usuário",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
 				"requestBody": {
 					"description": "Criar novo usuário",
 					"content": {
@@ -113,6 +119,10 @@
 				"summary": "Listar Usuários por tipo",
                 "parameters": [
 					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
 						"name": "tipo",
 						"in": "query",
 						"description": "1 - aluno, 2 - prae, 3 - manutenção",
@@ -134,6 +144,12 @@
 			"put": {
 				"tags": [ "USUARIOS" ],
 				"summary": "Editar usuário",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
 				"requestBody": {
 					"description": "Editar usuário existente",
 					"content": {
@@ -180,10 +196,36 @@
 				}
 			}
 		},
+		"/api/ced/user/data": {
+			"get": {
+				"tags": [ "USUARIOS" ],
+				"summary": "Busca dados do usuário",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Usuario Encontrado"
+					},
+					"400": {
+						"description": "Erro ao buscar usuário"
+					}
+				}
+			}
+		},
         "/api/ced/usuario/alterar/senha": {
 			"put": {
 				"tags": [ "USUARIOS" ],
 				"summary": "Editar senha do usuário",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
 				"requestBody": {
 					"description": "Editar senha do usuário existente",
 					"content": {
@@ -222,6 +264,12 @@
 			"patch": {
 				"tags": [ "USUARIOS" ],
 				"summary": "Desetivar usuario do sistema",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
 				"requestBody": {
 					"description": "Desativa um usuario do sistema",
 					"content": {

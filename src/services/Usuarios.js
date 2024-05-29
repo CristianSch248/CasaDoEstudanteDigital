@@ -105,43 +105,43 @@ async function desativarUsuario(id){
     }
 }
 
+async function fetchUserData(token){
+    const decoded = jwt.Decode(token)
+    
+    let user = await Usuarios.findOne(['id', 'nome', 'tipo'], { id: decoded.id })
+    
+    if (!user) return { success: false, message: 'Usuário não encontrado.' }
+    console.log("🚀 ~ fetchUserData ~ user:", user.dataValues)
+    
+    return { success: true, message: user }
+}
+
 async function login(body){
     try {
-        let whereEmail = {
-            where: { email: email.trim() }
-        }
+        let user = await Usuarios.findOne(['id', 'tipo', 'ativo', 'senha'], { email: body.email.trim() })
     
-        let whereSenha = {
-            where: { senha: senha.trim() }
-        }
+        if (!user) return { success: false, message: 'Usuário não encontrado.' }
+        if (!user.ativo) return { success: false, message: 'Usuário não ativo, solicite a ativação com o administrador!' }
     
-        let user = await Usuarios.findOne(['nome', 'email', 'tipo', 'ativo'], [whereEmail, whereSenha])
-    
-        if (!user.ativo) return { success: false, message: 'Usuário não ativo, solicite a ativação com o administrador!'}
-    
-        const match = await bcrypt.compare(body.senha, user.senha)
-    
-        if(match) {
+        if (await bcrypt.compare(body.senha.trim(), user.senha)) {
             const token = jwt.newToken(user)
-            return { success: true, message: { auth: true, token }}
+            return { success: true, message: { auth: true, token } }
         } else { 
-            return { success: false, message: 'E-mail ou Senha incorretos.'}
+            return { success: false, message: 'E-mail ou Senha incorretos.' }
         }
 
     } catch (error) {
         console.log("login ~ error:", error)
-        return { success: false, message: error}
+        return { success: false, message: error.message }
     }
 }
 
 async function logout(Token){
-    
-    const result = JTW.invalidToken(Token)
-    
+    const result = jwt.invalidToken(Token)
     if (result.success) {
-        return res.status(200).json(result);
+        return { success: true, message: result }
     } else {
-        return res.status(400).json(result);
+        return { success: false, message: result }
     }
 }
 
@@ -151,6 +151,7 @@ module.exports = {
     alterarUsuario,
     alterarSenhaUsuario,
     desativarUsuario,
+    fetchUserData,
     login,
     logout
 }

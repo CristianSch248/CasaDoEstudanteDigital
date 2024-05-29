@@ -7,8 +7,7 @@ const tokenBlacklist = new Set();
 
 function newToken(user){
     return jwt.sign(
-        { id: user.id }, 
-        { tipo: user.tipo }, 
+        { id: user.id, tipo: user.tipo }, 
         SECRET, 
         { expiresIn: 300 }
     )
@@ -37,7 +36,12 @@ function invalidToken(token){
     } else {
         return { success: false, message: 'Token ausente.' };
     }
-} 
+}
+
+function Decode(token){
+    const decodedToken = jwt.decode(token)
+    return decodedToken
+}
 
 function verifyPermissionAluno(req, res, next){
     const token = req.headers['x-access-token']
@@ -97,6 +101,7 @@ module.exports = {
     newToken,
     verifyJWT,
     invalidToken,
+    Decode,
     verifyPermissionAluno,
     verifyPermissionPrae,
     verifyPermissionManutencao
