@@ -35,8 +35,6 @@ const Vaga = sequelize.define('vaga', {
             key: 'id'
         },
     }
-}, {
-    schema: 'public', // Aqui define o esquema
 })
 console.log('Carregou [Vagas.js]')
 

@@ -107,12 +107,8 @@ async function desativarUsuario(id){
 
 async function fetchUserData(token){
     const decoded = jwt.Decode(token)
-    
-    let user = await Usuarios.findOne(['id', 'nome', 'tipo'], { id: decoded.id })
-    
-    if (!user) return { success: false, message: 'Usuário não encontrado.' }
-    console.log("🚀 ~ fetchUserData ~ user:", user.dataValues)
-    
+    let user = await Usuarios.findOne(['id', 'nome', 'tipo', 'telefone'], { id: decoded.id })
+    if (!user) return { success: false, message: 'Usuário não encontrado.' }    
     return { success: true, message: user }
 }
 
