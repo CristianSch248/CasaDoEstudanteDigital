@@ -33,7 +33,7 @@ async function novoUsuario(body){
 
 async function listarUsuarios(tipo){
     try {
-        let usuarios = await Usuarios.findAll(['id', 'nome', 'email'], [{ tipo: tipo } ])
+        let usuarios = await Usuarios.findAll(['id', 'nome', 'email', 'ativo'], [{ tipo: tipo } ])
         return { success: true, message: usuarios}
     } catch (error) {
         console.log('listarUsuarios ~ error:', error)
@@ -59,7 +59,7 @@ async function alterarUsuario(body){
     } catch (error){
         console.log("alterarUsuario ~ error:", error)
         await t.rollback()
-        return { succes: false, message: 'Erro ao editar o usuário'}
+        return { success: false, message: 'Erro ao editar o usuário'}
     }
 }
 
@@ -72,22 +72,42 @@ async function alterarSenhaUsuario(body){
         const match = await bcrypt.compare(body.senha, user.senha)
         if (match) {
             await t.rollback()
-            return { succes: false, message: 'As senhas são iguais, defina uma senha diferente.'}    
+            return { success: false, message: 'As senhas são iguais, defina uma senha diferente.'}    
         }
         
         user.senha = await bcrypt.hash(body.senha, 10)
 
         await user.save({ transaction: t })
         await t.commit()
-        return { succes: false, message: 'Senha alterada com sucesso.'}
+        return { success: true, message: 'Senha alterada com sucesso.'}
     } catch (error) {
         console.log("alterarSenhaUsuario ~ error:", error)
         await t.rollback()
-        return { succes: false, message: 'Erro ao alterar a senha.'}
+        return { success: false, message: 'Erro ao alterar a senha.'}
+    }
+}
+
+async function ativarUsuario(id){
+    console.log("🚀 ~ ativarUsuario ~ id:", id)
+    const t = await sequelize.transaction()
+    
+    try {
+        let user = await Usuarios.findOne(['id', 'ativo'], [{ id : id }])
+
+        user.ativo = true
+
+        await user.save({ transaction: t })
+        await t.commit()
+        return { success: true, message: 'Usuário Ativado com Sucesso.'}
+    } catch (error) {
+        console.log("alterarSenhaUsuario ~ error:", error)
+        await t.rollback()
+        return { success: false, message: 'Erro ao desativar usuário.'}
     }
 }
 
 async function desativarUsuario(id){
+    console.log("🚀 ~ desativarUsuario ~ id:", id)
     const t = await sequelize.transaction()
     
     try {
@@ -97,17 +117,17 @@ async function desativarUsuario(id){
 
         await user.save({ transaction: t })
         await t.commit()
-        return { succes: false, message: 'Usuário desativado com sucesso.'}
+        return { success: true, message: 'Usuário desativado com sucesso.'}
     } catch (error) {
         console.log("alterarSenhaUsuario ~ error:", error)
         await t.rollback()
-        return { succes: false, message: 'Erro ao desativar usuário.'}
+        return { success: false, message: 'Erro ao desativar usuário.'}
     }
 }
 
 async function fetchUserData(token){
     const decoded = jwt.Decode(token)
-    let user = await Usuarios.findOne(['id', 'nome', 'tipo', 'telefone'], { id: decoded.id })
+    let user = await Usuarios.findOne(['id', 'nome', 'email', 'senha', 'tipo', 'telefone'], { id: decoded.id })
     if (!user) return { success: false, message: 'Usuário não encontrado.' }    
     return { success: true, message: user }
 }
@@ -146,6 +166,7 @@ module.exports = {
     listarUsuarios,
     alterarUsuario,
     alterarSenhaUsuario,
+    ativarUsuario,
     desativarUsuario,
     fetchUserData,
     login,

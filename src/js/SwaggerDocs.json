@@ -295,6 +295,42 @@
 					}
 				}
 			}
+		},
+        "/api/ced/usuario/ativar": {
+			"patch": {
+				"tags": [ "USUARIOS" ],
+				"summary": "Desetivar usuario do sistema",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"requestBody": {
+					"description": "Desativa um usuario do sistema",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+                                    "id": {
+										"type": "integer",
+										"description": "id do usuários"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Cadastro Efetuado"
+					},
+					"400": {
+						"description": "Erro ao cadastrar"
+					}
+				}
+			}
 		}
 	},
 	"components": {

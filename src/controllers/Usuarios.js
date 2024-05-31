@@ -43,6 +43,16 @@ async function alterarSenhaUsuario(req, res){
     }
 }
 
+async function ativarUsuario(req, res){
+    try {
+        const result = await Usuarios.ativarUsuario(req.body.id)
+        sendResponse(res, result)
+    } catch (error) {
+        console.log("desativarUsuario ~ error:", error)
+        return res.status(400).send('Erro ao desativar usuário')
+    }
+}
+
 async function desativarUsuario(req, res){
     try {
         const result = await Usuarios.desativarUsuario(req.body.id)
@@ -96,6 +106,7 @@ module.exports = {
     listarUsuarios,
     alterarUsuario,
     alterarSenhaUsuario,
+    ativarUsuario,
     desativarUsuario,
     fetchUserData,
     login,

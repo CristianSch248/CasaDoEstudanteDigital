@@ -77,6 +77,20 @@ exports.alterarSenhaUsuario = [
 	},
 ]
 
+exports.ativarUsuario = [
+	check('id')
+		.not()
+		.isEmpty()
+		.withMessage('Usuário não informado')
+		.bail(),
+
+	async (req, res, next) => {
+		const errors = await validationResult(req)
+		if (!errors.isEmpty()) return res.status(400).send(errors.array()[0].msg)		
+		next()
+	},
+]
+
 exports.desativarUsuario = [
 	check('id')
 		.not()
