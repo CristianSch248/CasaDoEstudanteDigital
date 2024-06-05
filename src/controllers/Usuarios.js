@@ -12,6 +12,16 @@ async function novoUsuario(req, res){
     }
 }
 
+async function getUser(req, res){
+    try {        
+        const result = await Usuarios.getUser(req.query.id)
+        sendResponse(res, result)
+    } catch (error) {
+        console.log("listarUsuarios ~ error:", error)
+        return res.status(400).send('Erro ao buscar usuários.')
+    }
+}
+
 async function listarUsuarios(req, res){
     try {        
         const result = await Usuarios.listarUsuarios(req.query.tipo)
@@ -35,7 +45,13 @@ async function alterarUsuario(req, res){
 
 async function alterarSenhaUsuario(req, res){
     try {
-        const result = await Usuarios.alterarSenhaUsuario(req.body)
+        const authHeader = req.headers.authorization
+        if (!authHeader) return res.status(401).send('Token de autorização não fornecido')
+        
+        const token = authHeader.split(' ')[1]
+        if (!token) return res.status(401).send('Token de autorização malformado')
+
+        const result = await Usuarios.alterarSenhaUsuario(req.body, token)
         sendResponse(res, result)
     } catch (error) {
         console.log("alterarSenhaUsuario ~ error:", error)
@@ -109,6 +125,7 @@ module.exports = {
     ativarUsuario,
     desativarUsuario,
     fetchUserData,
+    getUser,
     login,
     logout
 }

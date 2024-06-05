@@ -49,9 +49,7 @@ async function findAll(attributes, filters) {
 async function findOne(attributes, filters) {
     let atributosValidados = await validateAttributes(attributes)
     if (atributosValidados.length === 0) {
-        for (let key in ModelUsuarios.getAttributes) {
-            atributosValidados.push(key)
-        }
+        atributosValidados = Object.keys(ModelUsuarios.getAttributes())
     }
 
     let Usuario = await ModelUsuarios.findOne({
@@ -60,6 +58,7 @@ async function findOne(attributes, filters) {
     })
     return Usuario
 }
+
 
 /**
  * Criar um registro

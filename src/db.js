@@ -11,4 +11,7 @@ const sequelize = new Sequelize(
   }
 )
 
+// Desativa o log SQL
+sequelize.options.logging = false;
+
 module.exports = { sequelize }

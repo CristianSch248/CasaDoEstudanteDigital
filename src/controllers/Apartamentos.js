@@ -4,7 +4,6 @@ const { sendResponse } = require('../js/Utils')
 async function novoApartamento(req, res){
     try {
         let body = req.body
-        
         const result = await Apartamentos.novoApartamento(body)
         sendResponse(res, result)
     } catch (error){
@@ -14,10 +13,8 @@ async function novoApartamento(req, res){
 }
 
 async function buscarApartamentos(req, res){
-    try {
-        let body = req.body
-        
-        const result = await Apartamentos.buscarApartamentos(body)
+    try {        
+        const result = await Apartamentos.buscarApartamentos()
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
@@ -26,10 +23,8 @@ async function buscarApartamentos(req, res){
 }
 
 async function buscarApartamento(req, res){
-    try {
-        let body = req.body
-        
-        const result = await Apartamentos.buscarApartamento(body)
+    try {        
+        const result = await Apartamentos.buscarApartamento(req.query.id)
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
@@ -38,10 +33,8 @@ async function buscarApartamento(req, res){
 }
 
 async function apagarApartamento(req, res){
-    try {
-        let body = req.body
-        
-        const result = await Apartamentos.apagarApartamento(body)
+    try {        
+        const result = await Apartamentos.apagarApartamento(req.query.id)
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
@@ -52,7 +45,6 @@ async function apagarApartamento(req, res){
 async function atualizarApartamento(req, res){
     try {
         let body = req.body
-        
         const result = await Apartamentos.atualizarApartamento(body)
         sendResponse(res, result)
     } catch (error){

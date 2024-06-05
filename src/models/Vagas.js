@@ -10,7 +10,7 @@ const Vaga = sequelize.define('vaga', {
     dt_entrada: {
         type: Sequelize.DATEONLY
     },
-    dt_manutencao: {
+    dt_saida: {
         type: Sequelize.DATEONLY
     },
     observacao: {

@@ -5,7 +5,7 @@ async function novoPatrimonio(req, res){
     try {
         let body = req.body
         
-        const result = await Usuarios.novoUsuario(body)
+        const result = await Patrimonios.novoPatrimonio(body)
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
@@ -15,9 +15,7 @@ async function novoPatrimonio(req, res){
 
 async function buscarPatrimonios(req, res){
     try {
-        let body = req.body
-        
-        const result = await Usuarios.novoUsuario(body)
+        const result = await Patrimonios.buscarPatrimonios(body)
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
@@ -27,9 +25,7 @@ async function buscarPatrimonios(req, res){
 
 async function buscarPatrimonio(req, res){
     try {
-        let body = req.body
-        
-        const result = await Usuarios.novoUsuario(body)
+        const result = await Patrimonios.buscarPatrimonio(req.query.id)
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
@@ -39,9 +35,7 @@ async function buscarPatrimonio(req, res){
 
 async function apagarPatrimonio(req, res){
     try {
-        let body = req.body
-        
-        const result = await Usuarios.novoUsuario(body)
+        const result = await Patrimonios.apagarPatrimonio(req.query.id)
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
@@ -53,7 +47,7 @@ async function atualizarPatrimonio(req, res){
     try {
         let body = req.body
         
-        const result = await Usuarios.novoUsuario(body)
+        const result = await Patrimonios.atualizarPatrimonio(body)
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)

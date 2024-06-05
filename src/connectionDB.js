@@ -1,6 +1,6 @@
 (async () => {
     const Sequelize = require('sequelize')
-    const database = require('./db')
+    const database = require('./dbConfig')
     
     const env = process.env.NODE_ENV || 'development'
     const sequelize = new Sequelize(database[env])

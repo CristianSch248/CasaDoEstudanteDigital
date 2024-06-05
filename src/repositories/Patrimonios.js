@@ -27,10 +27,8 @@ async function validateAttributes(attributes) {
 async function findAll(attributes, filters) {
 	let atributosValidados = await validateAttributes(attributes)
 	if (atributosValidados.length === 0) {
-		for (let key in ModelPatrimonio.rawAttributes) {
-			atributosValidados.push(key)
-		}
-	}
+        atributosValidados = Object.keys(ModelPatrimonio.getAttributes())
+    }
 
 	let Patrimonios = await ModelPatrimonio.findAll({
 		attributes: atributosValidados,

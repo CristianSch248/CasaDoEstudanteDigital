@@ -49,10 +49,8 @@ async function findAll(attributes, filters) {
 async function findOne(attributes, filters) {
 	let atributosValidados = await validateAttributes(attributes)
 	if (atributosValidados.length === 0) {
-		for (let key in ModelApartamento.rawAttributes) {
-			atributosValidados.push(key)
-		}
-	}
+        atributosValidados = Object.keys(ModelApartamento.getAttributes())
+    }
 
 	let Apartamento = await ModelApartamento.findOne({
 		attributes: atributosValidados,
@@ -116,9 +114,9 @@ async function update(Apartamento, transaction) {
  * @param { Object } transaction Variavel da transação.
  * @returns { Boolean } true
  */
-async function deleteItem(Apartamento, transaction) {
+async function deleteItem(id, transaction) {
 	await ModelApartamento.destroy({
-		where: { id: Apartamento.id }
+		where: { id: id }
 	}, { transaction: transaction })
 	return true
 }
