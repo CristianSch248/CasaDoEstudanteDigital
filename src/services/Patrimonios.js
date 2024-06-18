@@ -5,8 +5,8 @@ async function novoPatrimonio(body){
     const t = await sequelize.transaction()
     try{
         let patrimonioCriado = await Patrimonios.create({
-            descricao: body.numero,
-            estado: body.bloco,
+            descricao: body.descricao,
+            estado: body.estado,
         }, t)
 		if (!patrimonioCriado) return { success: false, message: 'Houve um erro ao cadastrar o Patrimônio.'}
         
@@ -61,19 +61,19 @@ async function apagarPatrimonio(id){
 async function atualizarPatrimonio(body){
     const t = await sequelize.transaction()
 
-    try{
+    try {
         let patrimonio = await Patrimonios.findOne([], [{ id : body.id }])
         if (!patrimonio) return { success: false, message: 'Patrimônio não encontrado'}
 
-        if (body.bloco) patrimonio.descricao = body.bloco
-        if (body.bloco) patrimonio.estado = body.bloco
-        if (body.id_apartamento) patrimonio.estado = body.id_apartamento
+        if (body.descricao) patrimonio.descricao = body.descricao
+        if (body.estado) patrimonio.estado = body.estado
+        if (body.id_apartamento) patrimonio.id_apartamento = body.id_apartamento
 
         await patrimonio.save({transaction: t})
         await t.commit()
         console.log('(log) - Patrimônio alterado com sucesso')
         
-        return { success: true, message: Apto } 
+        return { success: true, message: patrimonio } 
     } catch (error){
         console.log("error:", error)
         await t.rollback()

@@ -1,11 +1,10 @@
-const Patrimonios = require('../services/Patrimonios')
+const Vagas = require('../services/Vagas')
 const { sendResponse } = require('../js/Utils')
 
-async function novoPatrimonio(req, res){
+async function novaVaga(req, res){
     try {
         let body = req.body
-        
-        const result = await Patrimonios.novoPatrimonio(body)
+        const result = await Vagas.novaVaga(body)
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
@@ -13,9 +12,9 @@ async function novoPatrimonio(req, res){
     }
 }
 
-async function buscarPatrimonios(req, res){
-    try {
-        const result = await Patrimonios.buscarPatrimonios()
+async function buscarVagas(req, res){
+    try {        
+        const result = await Vagas.buscarVagas()
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
@@ -23,9 +22,9 @@ async function buscarPatrimonios(req, res){
     }
 }
 
-async function buscarPatrimonio(req, res){
-    try {
-        const result = await Patrimonios.buscarPatrimonio(req.query.id)
+async function buscarVaga(req, res){
+    try {        
+        const result = await Vagas.buscarVaga(req.query.id)
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
@@ -33,9 +32,9 @@ async function buscarPatrimonio(req, res){
     }
 }
 
-async function apagarPatrimonio(req, res){
-    try {
-        const result = await Patrimonios.apagarPatrimonio(parseInt(req.query.id))
+async function apagarVaga(req, res){
+    try {        
+        const result = await Vagas.apagarVaga(req.query.id)
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
@@ -43,11 +42,10 @@ async function apagarPatrimonio(req, res){
     }
 }
 
-async function atualizarPatrimonio(req, res){
+async function atualizarVaga(req, res){
     try {
         let body = req.body
-        
-        const result = await Patrimonios.atualizarPatrimonio(body)
+        const result = await Vagas.atualizarVaga(body)
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
@@ -56,9 +54,9 @@ async function atualizarPatrimonio(req, res){
 }
 
 module.exports = {
-    novoPatrimonio,
-    buscarPatrimonios,
-    buscarPatrimonio,
-    apagarPatrimonio,
-    atualizarPatrimonio,
+    novaVaga,
+    buscarVagas,
+    buscarVaga,
+    apagarVaga,
+    atualizarVaga,
 }

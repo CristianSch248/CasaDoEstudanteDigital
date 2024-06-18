@@ -19,7 +19,7 @@ const Patrimonio = sequelize.define('patrimonio', {
         type: Sequelize.STRING,
     },
     estado: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
     }
 })
 

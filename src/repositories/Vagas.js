@@ -1,6 +1,6 @@
 require('dotenv/config')
 
-const ModelPatrimonio = require('../models/Patrimonios')
+const ModelVagas = require('../models/Vagas')
 
 /**
  * Retorna um array de atributos validados.
@@ -9,114 +9,114 @@ const ModelPatrimonio = require('../models/Patrimonios')
 async function validateAttributes(attributes) {
 	if (process.env.debug == 'true') {
 		return attributes.filter(attribute => {
-			if (!ModelPatrimonio.rawAttributes.hasOwnProperty(attribute)) {
-                console.log(`validateAttributes ~ Campo '${attribute}' não existe na tabela Patrimonios`)
+			if (!ModelVagas.getAttributes().hasOwnProperty(attribute)) {
+                console.log(`validateAttributes ~ Campo '${attribute}' não existe na tabela Vagas`)
             }
-			return ModelPatrimonio.rawAttributes.hasOwnProperty(attribute)
+			return ModelVagas.getAttributes().hasOwnProperty(attribute)
 		})
 	}
-	return attributes.filter(attribute => ModelPatrimonio.rawAttributes.hasOwnProperty(attribute))
+	return attributes.filter(attribute => ModelVagas.getAttributes().hasOwnProperty(attribute))
 }
 
 /**
  * Retorna um array de registros.
  * @param { Array<String> } attributes Atributos da model.
  * @param { WhereOptions } filters Filtros da busca.
- * @returns { Model } Patrimonios
+ * @returns { Model } Apartamentos
  */
 async function findAll(attributes, filters) {
 	let atributosValidados = await validateAttributes(attributes)
 	if (atributosValidados.length === 0) {
-        atributosValidados = Object.keys(ModelPatrimonio.getAttributes())
-    }
+		for (let key in ModelVagas.getAttributes()) {
+			atributosValidados.push(key)
+		}
+	}
 
-	let Patrimonios = await ModelPatrimonio.findAll({
+	let Apartamentos = await ModelVagas.findAll({
 		attributes: atributosValidados,
 		where: filters
 	})
 
-	return Patrimonios
+	return Apartamentos
 }
 
 /**
  * Retorna um objeto de registros.
  * @param { Array<String> } attributes Atributos da model.
  * @param { WhereOptions } filters Filtros da busca.
- * @returns { Model } Patrimonio
+ * @returns { Model } Apartamentos
  */
 async function findOne(attributes, filters) {
 	let atributosValidados = await validateAttributes(attributes)
 	if (atributosValidados.length === 0) {
-		for (let key in ModelPatrimonio.rawAttributes) {
-			atributosValidados.push(key)
-		}
-	}
+        atributosValidados = Object.keys(ModelVagas.getAttributes())
+    }
 
-	let Patrimonio = await ModelPatrimonio.findOne({
+	let Apartamento = await ModelVagas.findOne({
 		attributes: atributosValidados,
 		where: filters
 	})
 
-	return Patrimonio
+	return Apartamento
 }
 
 /**
  * Criar um registro
- * @param { Object } Patrimonio Objeto da entidade a ser criado.
+ * @param { Object } Apartamento Objeto da entidade a ser criado.
  * @param { Object } transaction Variavel da transação.
- * @returns { Model } Patrimonio Criado
+ * @returns { Model } Apartamento Criado
  */
-async function create(Patrimonio, transaction) {
+async function create(Apartamento, transaction) {
 	let attributes = []
 
-	for (let key in Patrimonio.rawAttributes) {
+	for (let key in Apartamento.rawAttributes) {
 		attributes.push(key)
 	}
 
 	let atributosValidados = await validateAttributes(attributes)
 	if (attributes.length != atributosValidados.length) return null
 
-	let PatrimonioCriado = await ModelPatrimonio.create(Patrimonio, { transaction: transaction })
+	let ApartamentoCriado = await ModelVagas.create(Apartamento, { transaction: transaction })
 
-	return PatrimonioCriado
+	return ApartamentoCriado
 }
 
 /**
  * Alterar um registro
- * @param { Object } Patrimonio Objeto da entidade a ser alterado.
+ * @param { Object } Apartamento Objeto da entidade a ser alterado.
  * @param { Object } transaction Variavel da transação.
- * @returns { Model } Patrimonio Alterado
+ * @returns { Model } Apartamento Alterado
  */
-async function update(Patrimonio, transaction) {
+async function update(Apartamento, transaction) {
 	let attributes = []
 
-	for (let key in Patrimonio) {
+	for (let key in Apartamento) {
 		attributes.push(key)
 	}
 
 	let atributosValidados = await validateAttributes(attributes)
 	if (attributes.length != atributosValidados.length) return null
 
-	let PatrimonioAlterado = await ModelPatrimonio.findOne({
-		where: { id: Patrimonio.id }
+	let ApartamentoAlterado = await ModelVagas.findOne({
+		where: { id: Apartamento.id }
 	}, { transaction: transaction })
 
-	for (let key in Patrimonio) {
-		PatrimonioAlterado[key] = Patrimonio[key]
+	for (let key in Apartamento) {
+		ApartamentoAlterado[key] = Usuario[key]
 	}
 
-	return PatrimonioAlterado
+	return ApartamentoAlterado
 }
 
 /**
  * Apagar um registro
- * @param { Object } Patrimonio Objeto da entidade a ser excluido.
+ * @param { Object } Apartamento Objeto da entidade a ser excluido.
  * @param { Object } transaction Variavel da transação.
  * @returns { Boolean } true
  */
-async function deleteItem(Patrimonio, transaction) {
-	await ModelPatrimonio.destroy({
-		where: { id: Patrimonio }
+async function deleteItem(id, transaction) {
+	await ModelVagas.destroy({
+		where: { id: id }
 	}, { transaction: transaction })
 	return true
 }
