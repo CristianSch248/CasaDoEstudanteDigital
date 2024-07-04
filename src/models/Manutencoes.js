@@ -45,6 +45,9 @@ const Manutencao = sequelize.define('manutencao', {
     dt_manutencao: {
         type: Sequelize.DATEONLY
     },
+    hora_manutencao: {
+        type: Sequelize.TIME
+    },
     status: {
         type: Sequelize.INTEGER
     },

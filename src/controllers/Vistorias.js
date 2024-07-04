@@ -1,11 +1,19 @@
 const Vistorias = require('../services/Vistorias')
 const { sendResponse } = require('../js/Utils')
+const jwt = require('../js/jwt')
 
-async function novoVistoria(req, res){
+async function novaVistoria(req, res){
     try {
-        let body = req.body
+        const authHeader = req.headers.authorization
+        if (!authHeader) return res.status(401).send('Token de autorização não fornecido')
         
-        const result = await Usuarios.novoUsuario(body)
+        const token = authHeader.split(' ')[1]
+        if (!token) return res.status(401).send('Token de autorização malformado')
+
+        const decoded = jwt.Decode(token);
+        
+        let body = req.body
+        const result = await Vistorias.novaVistoria(body, decoded.id)
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
@@ -14,12 +22,12 @@ async function novoVistoria(req, res){
 }
 
 async function buscarVistorias(req, res){
+    console.log("🚀 ~ buscarVistorias ~ req:", req)
     try {
-        let body = req.body
-        
-        const result = await Usuarios.novoUsuario(body)
+        console.log(req.query)
+        const result = await Vistorias.buscarVistorias()
         sendResponse(res, result)
-    } catch (error){
+    } catch (error) {
         console.log("novoUsuario ~ error:", error)
         return res.status(400).send('Erro ao criar o usuário')
     }
@@ -27,9 +35,7 @@ async function buscarVistorias(req, res){
 
 async function buscarVistoria(req, res){
     try {
-        let body = req.body
-        
-        const result = await Usuarios.novoUsuario(body)
+        const result = await Vistorias.buscarVistoria(body)
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
@@ -39,9 +45,7 @@ async function buscarVistoria(req, res){
 
 async function apagarVistoria(req, res){
     try {
-        let body = req.body
-        
-        const result = await Usuarios.novoUsuario(body)
+        const result = await Vistorias.apagarVistoria(req.query.id)
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
@@ -52,8 +56,7 @@ async function apagarVistoria(req, res){
 async function atualizarVistoria(req, res){
     try {
         let body = req.body
-        
-        const result = await Usuarios.novoUsuario(body)
+        const result = await Vistorias.atualizarVistoria(body)
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
@@ -62,7 +65,7 @@ async function atualizarVistoria(req, res){
 }
 
 module.exports = {
-    novoVistoria,
+    novaVistoria,
     buscarVistorias,
     buscarVistoria,
     apagarVistoria,

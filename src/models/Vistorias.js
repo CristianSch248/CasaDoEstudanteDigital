@@ -36,7 +36,15 @@ const Vistorias = sequelize.define('vistorias', {
     dt_vistoria: {
        type: Sequelize.DATEONLY 
     },
+    hora_vistoria: {
+        type: Sequelize.TIME
+    },
     status: {
+        /**
+         * 1 - ativo
+         * 2 - feito
+         * 3 - cancelado
+         */
         type: Sequelize.INTEGER,
     },
     Observacoes:{

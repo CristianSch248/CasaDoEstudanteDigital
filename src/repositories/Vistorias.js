@@ -6,16 +6,21 @@ const ModelVistorias = require('../models/Vistorias')
  * Retorna um array de atributos validados.
  * @param { Array<String> } attributes Atribuitos a serem validados.
  */
-async function validateAttributes(attributes) {
-	if (process.env.debug == 'true') {
-		return attributes.filter(attribute => {
-			if (!ModelVistorias.rawAttributes.hasOwnProperty(attribute)) {
-                console.log(`validateAttributes ~ Campo '${attribute}' não existe na tabela Vistorias`)
+async function validateAttributes(attributes) { // o jeito certo
+    if (process.env.debug == 'true') {
+        return attributes.filter(attribute => {
+            const attributesDefinition = ModelVistorias.getAttributes();
+            if (!attributesDefinition.hasOwnProperty(attribute)) {
+                console.log(`validateAttributes ~ Campo '${attribute}' não existe na tabela Vistorias`);
+                return false;
             }
-			return ModelVistorias.rawAttributes.hasOwnProperty(attribute)
-		})
-	}
-	return attributes.filter(attribute => ModelVistorias.rawAttributes.hasOwnProperty(attribute))
+            return true;
+        });
+    }
+    return attributes.filter(attribute => {
+        const attributesDefinition = ModelVistorias.getAttributes();
+        return attributesDefinition.hasOwnProperty(attribute);
+    });
 }
 
 /**
@@ -27,7 +32,7 @@ async function validateAttributes(attributes) {
 async function findAll(attributes, filters) {
 	let atributosValidados = await validateAttributes(attributes)
 	if (atributosValidados.length === 0) {
-		for (let key in ModelVistorias.rawAttributes) {
+		for (let key in ModelVistorias.getAttributes()) {
 			atributosValidados.push(key)
 		}
 	}
@@ -49,7 +54,7 @@ async function findAll(attributes, filters) {
 async function findOne(attributes, filters) {
 	let atributosValidados = await validateAttributes(attributes)
 	if (atributosValidados.length === 0) {
-		for (let key in ModelVistorias.rawAttributes) {
+		for (let key in ModelVistorias.getAttributes()) {
 			atributosValidados.push(key)
 		}
 	}
@@ -121,7 +126,7 @@ async function update(Vistoria, transaction) {
  */
 async function deleteItem(Vistoria, transaction) {
 	await ModelVistorias.destroy({
-		where: { id: Vistoria.id }
+		where: { id: Vistoria }
 	}, { transaction: transaction })
 	return true
 }
