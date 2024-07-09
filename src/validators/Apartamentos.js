@@ -32,6 +32,22 @@ exports.buscarApartamentos = [
 	},
 ]
 
+exports.buscarVagas = [
+	async (req, res, next) => {
+		const errors = await validationResult(req)
+		if (!errors.isEmpty()) return res.status(400).send(errors.array()[0].msg)		
+		next()
+	},
+]
+
+exports.MeuApartamento = [
+	async (req, res, next) => {
+		const errors = await validationResult(req)
+		if (!errors.isEmpty()) return res.status(400).send(errors.array()[0].msg)		
+		next()
+	},
+]
+
 exports.buscarApartamento = [
     check('id')
 		.not()

@@ -1,6 +1,5 @@
 const Vistorias = require('../repositories/Vistorias')
 const Vagas = require('../repositories/Vagas')
-const { sendResponse } = require('../js/Utils')
 const { sequelize } = require('../db')
 const moment = require('moment');
 
@@ -42,7 +41,7 @@ async function novaVistoria(body, id){
 
 async function buscarVistorias(status){
     try {
-        let Vistoria = await Vistorias.findAll(['id', 'dt_vistoria', 'hora_vistoria'], [{ status: 1 } ])
+        let Vistoria = await Vistorias.findAll(['id', 'dt_vistoria', 'hora_vistoria'], [{ status: 1 }])
         return { success: true, message: Vistoria}
     } catch (error) {
         console.log('buscarVistorias ~ error:', error)
@@ -52,7 +51,7 @@ async function buscarVistorias(status){
 
 async function buscarVistoria(id){
     try {
-        let Vistoria = await Vistorias.findOne([], [{ id: id } ])
+        let Vistoria = await Vistorias.findOne([], [{ id: id }])
         return { success: true, message: Vistoria}
     } catch (error) {
         console.log('buscarVistoria ~ error:', error)
@@ -61,7 +60,6 @@ async function buscarVistoria(id){
 }
 
 async function apagarVistoria(id){
-    console.log("🚀 ~ apagarVistoria ~ id:", id)
     const t = await sequelize.transaction()
     try{
         let Vistoria = await Vistorias.deleteItem(id, t)

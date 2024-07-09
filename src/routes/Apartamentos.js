@@ -9,4 +9,8 @@ routes.post('/apartamento/new', validators.novoApartamento, controller.novoApart
 routes.put('/apartamento/update', validators.atualizarApartamento, controller.atualizarApartamento)
 routes.delete('/apartamento/delete', validators.apagarApartamento, controller.apagarApartamento)
 
+routes.get('/apartamento/vagas', validators.buscarVagas, controller.buscarVagas)
+
+routes.get('/apartamento/dados', validators.MeuApartamento, controller.MeuApartamento)
+
 module.exports = routes

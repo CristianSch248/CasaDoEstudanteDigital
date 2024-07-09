@@ -76,7 +76,7 @@ async function create(Manutencao, transaction) {
 	let atributosValidados = await validateAttributes(attributes)
 	if (attributes.length != atributosValidados.length) return null
 
-	let ManutencaoCriada = await ModelManutencao.create(Usuario, { transaction: transaction })
+	let ManutencaoCriada = await ModelManutencao.create(Manutencao, { transaction: transaction })
 
 	return ManutencaoCriada
 }
@@ -114,9 +114,9 @@ async function update(Manutencao, transaction) {
  * @param { Object } transaction Variavel da transação.
  * @returns { Boolean } true
  */
-async function deleteItem(Manutencao, transaction) {
+async function deleteItem(id, transaction) {
 	await ModelManutencao.destroy({
-		where: { id: Manutencao.id }
+		where: { id: id }
 	}, { transaction: transaction })
 	return true
 }

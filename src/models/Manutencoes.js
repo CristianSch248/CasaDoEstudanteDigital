@@ -49,6 +49,11 @@ const Manutencao = sequelize.define('manutencao', {
         type: Sequelize.TIME
     },
     status: {
+        /**
+         * 1 - ativo
+         * 2 - feito
+         * 3 - cancelado
+         */
         type: Sequelize.INTEGER
     },
 })

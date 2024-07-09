@@ -1,11 +1,20 @@
 const Manutencoes = require('../services/Manutencoes')
 const { sendResponse } = require('../js/Utils')
+const jwt = require('../js/jwt')
 
 async function novaManutencao(req, res){
     try {
+        const authHeader = req.headers.authorization
+        if (!authHeader) return res.status(401).send('Token de autorização não fornecido')
+        
+        const token = authHeader.split(' ')[1]
+        if (!token) return res.status(401).send('Token de autorização malformado')
+
+        const decoded = jwt.Decode(token);
+        
         let body = req.body
         
-        const result = await Manutencoes.novaManutencao(body)
+        const result = await Manutencoes.novaManutencao(body, decoded.id)
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
@@ -15,9 +24,7 @@ async function novaManutencao(req, res){
 
 async function buscarManutencoes(req, res){
     try {
-        let body = req.body
-        
-        const result = await Manutencoes.buscarManutencoes(body)
+        const result = await Manutencoes.buscarManutencoes()
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
@@ -27,9 +34,7 @@ async function buscarManutencoes(req, res){
 
 async function buscarManutencao(req, res){
     try {
-        let body = req.body
-        
-        const result = await Manutencoes.buscarManutencao(body)
+        const result = await Manutencoes.buscarManutencao(req.query.id)
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
@@ -39,9 +44,7 @@ async function buscarManutencao(req, res){
 
 async function apagarManutencao(req, res){
     try {
-        let body = req.body
-        
-        const result = await Manutencoes.apagarManutencao(body)
+        const result = await Manutencoes.apagarManutencao(req.query.id)
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
@@ -52,7 +55,6 @@ async function apagarManutencao(req, res){
 async function atualizarManutencao(req, res){
     try {
         let body = req.body
-        
         const result = await Manutencoes.atualizarManutencao(body)
         sendResponse(res, result)
     } catch (error){

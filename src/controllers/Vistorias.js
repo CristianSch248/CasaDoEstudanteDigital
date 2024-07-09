@@ -22,9 +22,7 @@ async function novaVistoria(req, res){
 }
 
 async function buscarVistorias(req, res){
-    console.log("🚀 ~ buscarVistorias ~ req:", req)
     try {
-        console.log(req.query)
         const result = await Vistorias.buscarVistorias()
         sendResponse(res, result)
     } catch (error) {
@@ -35,7 +33,7 @@ async function buscarVistorias(req, res){
 
 async function buscarVistoria(req, res){
     try {
-        const result = await Vistorias.buscarVistoria(body)
+        const result = await Vistorias.buscarVistoria(req.query.id)
         sendResponse(res, result)
     } catch (error){
         console.log("novoUsuario ~ error:", error)
