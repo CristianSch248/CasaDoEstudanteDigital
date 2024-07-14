@@ -57,20 +57,10 @@ exports.apagarPatrimonio = [
 
 exports.atualizarPatrimonio = [
     check('id')
-        .not()
-        .isEmpty()
-        .withMessage('patrimônio não informado')
-        .bail(),
-    check('descricao')
-		.not()
-		.isEmpty()
-		.withMessage('Descrição do patrimônio não informada')
-		.bail(),
-    check('estado')
-		.not()
-		.isEmpty()
-		.withMessage('Estado de conservação do patrimônio não informado')
-		.bail(),
+      .not()
+      .isEmpty()
+      .withMessage('patrimônio não informado')
+      .bail(),
 
     async (req, res, next) => {
         const errors = await validationResult(req)

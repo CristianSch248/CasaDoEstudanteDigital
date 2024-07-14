@@ -24,7 +24,17 @@ async function getUser(req, res){
 
 async function listarUsuarios(req, res){
     try {        
-        const result = await Usuarios.listarUsuarios(req.query.tipo)
+        const result = await Usuarios.listarUsuarios()
+        sendResponse(res, result)
+    } catch (error) {
+        console.log("listarUsuarios ~ error:", error)
+        return res.status(400).send('Erro ao buscar usuários.')
+    }
+}
+
+async function listarAlunos(req, res){
+    try {        
+        const result = await Usuarios.listarAlunos()
         sendResponse(res, result)
     } catch (error) {
         console.log("listarUsuarios ~ error:", error)
@@ -120,6 +130,7 @@ async function logout(req, res){
 module.exports = {
     novoUsuario,
     listarUsuarios,
+    listarAlunos,
     alterarUsuario,
     alterarSenhaUsuario,
     ativarUsuario,

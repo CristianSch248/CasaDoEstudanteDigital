@@ -1,4 +1,5 @@
 const Usuarios = require('../repositories/Usuarios')
+const Vagas = require('../repositories/Vagas')
 const { sequelize } = require('../db')
 const jwt = require('../js/jwt')
 const bcrypt = require('bcrypt')
@@ -33,8 +34,33 @@ async function novoUsuario(body){
 
 async function listarUsuarios(tipo){
     try {
-        let usuarios = await Usuarios.findAll(['id', 'nome', 'email', 'ativo'], [{ tipo: tipo } ])
+        let usuarios = await Usuarios.findAll(['id', 'nome', 'email', 'ativo'], [{ tipo: [2, 3]}])
         return { success: true, message: usuarios}
+    } catch (error) {
+        console.log('listarUsuarios ~ error:', error)
+        return { success: false, message: 'Houve um problema ao consultar a lista de usuarios!'}
+    }
+}
+
+async function listarAlunos(){
+    try {
+        let alunoSemVagas = []
+        let Alunos = []
+        let VagasAluno = []
+
+
+        Alunos = await Usuarios.findAll(['id', 'nome', 'email', 'ativo'], [{ tipo: 1 }])
+        console.log("🚀 ~ listarAlunos ~ Alunos:", Alunos)
+
+        for(let aluno of Alunos){
+            VagasAluno = await Vagas.findAll([], [{ id_aluno: aluno.id }, { ativo: true }])
+            console.log("🚀 ~ listarAlunos ~ VagasAluno:", VagasAluno)
+            if (VagasAluno.length == 0) {
+                alunoSemVagas.push(aluno)
+            }
+        }
+
+        return { success: true, message: alunoSemVagas}
     } catch (error) {
         console.log('listarUsuarios ~ error:', error)
         return { success: false, message: 'Houve um problema ao consultar a lista de usuarios!'}
@@ -116,7 +142,7 @@ async function ativarUsuario(id){
 
         await user.save({ transaction: t })
         await t.commit()
-        return { success: true, message: 'Usuário Ativado com Sucesso.'}
+        return { success: true, message: 'Usuário Ativo com Sucesso.'}
     } catch (error) {
         console.log("alterarSenhaUsuario ~ error:", error)
         await t.rollback()
@@ -134,7 +160,7 @@ async function desativarUsuario(id){
 
         await user.save({ transaction: t })
         await t.commit()
-        return { success: true, message: 'Usuário desativado com sucesso.'}
+        return { success: true, message: 'Usuário desativo com sucesso.'}
     } catch (error) {
         console.log("alterarSenhaUsuario ~ error:", error)
         await t.rollback()
@@ -181,6 +207,7 @@ async function logout(Token){
 module.exports = {
     novoUsuario,
     listarUsuarios,
+    listarAlunos,
     alterarUsuario,
     alterarSenhaUsuario,
     ativarUsuario,

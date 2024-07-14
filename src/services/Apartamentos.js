@@ -146,9 +146,8 @@ async function atualizarApartamento(body){
     
         await Apto.save({transaction: t})
         await t.commit()
-        console.log('(log) - Apartamento alterado com sucesso')
         
-        return { success: true, message: Apto } 
+        return { success: true, message: 'Informações do apatamento alteradas' } 
     } catch (error){
         console.log("error:", error)
         await t.rollback()

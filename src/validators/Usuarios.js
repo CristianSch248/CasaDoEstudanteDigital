@@ -47,7 +47,14 @@ exports.getUser = [
 
 exports.listarUsuarios = [
 	async (req, res, next) => {
-		if (!req.query.tipo) return res.status(400).send("Tipo de usuário não informado")
+		const errors = await validationResult(req)
+		if (!errors.isEmpty()) return res.status(400).send(errors.array()[0].msg)		
+		next()
+	},
+]
+
+exports.listarAlunos = [
+	async (req, res, next) => {
 		const errors = await validationResult(req)
 		if (!errors.isEmpty()) return res.status(400).send(errors.array()[0].msg)		
 		next()

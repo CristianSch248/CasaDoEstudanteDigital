@@ -1,6 +1,6 @@
-const Sequelize = require('sequelize')
-const { sequelize } = require('../db')
-const Apartamentos = require('./Apartamentos')
+const Sequelize = require('sequelize');
+const { sequelize } = require('../db');
+const Vagas = require('./Vagas');
 
 const Usuario = sequelize.define('usuario', {
     id: {
@@ -9,11 +9,11 @@ const Usuario = sequelize.define('usuario', {
         autoIncrement: true
     },
     nome: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
     },
-    email:{
+    email: {
         type: Sequelize.STRING,
-        unique: true,
+        unique: true
     },
     senha: {
         type: Sequelize.STRING
@@ -36,16 +36,18 @@ const Usuario = sequelize.define('usuario', {
         type: Sequelize.BOOLEAN,
         defaultValue: true
     },
-    id_apartamento: { // null se for PRAE ou MANUTENÇÂO
+    id_apartamento: {
         type: Sequelize.INTEGER,
         onDelete: 'cascade',
         references: {
             model: 'apartamentos',
             key: 'id'
-        },
+        }
     }
-})
+});
 
-console.log('Carregou [Usuario.js]')
+Usuario.hasMany(Vagas, { as: 'vagas', foreignKey: 'id_aluno' });
+
+console.log('Carregou [Usuario.js]');
 
 module.exports = Usuario;

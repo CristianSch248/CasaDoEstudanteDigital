@@ -10,6 +10,7 @@ routes.post('/usuario/new', validators.novoUsuario, controller.novoUsuario)
 
 routes.get('/usuario/', validators.getUser, controller.getUser)
 routes.get('/usuario/listarportipo', validators.listarUsuarios, controller.listarUsuarios)
+routes.get('/usuario/alunos', validators.listarAlunos, controller.listarAlunos)
 routes.get('/user/data', validators.fetchUserData, controller.fetchUserData)
 
 routes.put('/usuario/editar', validators.alterarUsuario, controller.alterarUsuario)

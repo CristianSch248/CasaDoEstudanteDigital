@@ -23,7 +23,7 @@ async function novoPatrimonio(body){
 
 async function buscarPatrimonios(){
     try {
-        let patrimonio = await Patrimonios.findAll(['id', 'descricao', 'estado'], [])
+        let patrimonio = await Patrimonios.findAll(['id', 'descricao', 'estado'], [{ id_apartamento: null }])
         return { success: true, message: patrimonio}
     } catch (error) {
         console.log('error:', error)
@@ -33,7 +33,7 @@ async function buscarPatrimonios(){
 
 async function buscarPatrimonio(id){
     try {
-        let patrimonio = await Patrimonios.findOne([], [{ id : id }])
+        let patrimonio = await Patrimonios.findOne([], [{ id: id }])
         if (!patrimonio) return { success: false, message: 'Patrimônio não encontrado.' }  
         return { success: true, message: patrimonio}
     } catch (error) {
@@ -59,6 +59,7 @@ async function apagarPatrimonio(id){
 }
 
 async function atualizarPatrimonio(body){
+    console.log("🚀 ~ atualizarPatrimonio ~ body:", body)
     const t = await sequelize.transaction()
 
     try {
@@ -71,9 +72,8 @@ async function atualizarPatrimonio(body){
 
         await patrimonio.save({transaction: t})
         await t.commit()
-        console.log('(log) - Patrimônio alterado com sucesso')
         
-        return { success: true, message: patrimonio } 
+        return { success: true, message: 'Patrimônio alterado com sucesso!' } 
     } catch (error){
         console.log("error:", error)
         await t.rollback()

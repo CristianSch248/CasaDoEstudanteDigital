@@ -1,5 +1,6 @@
-const Sequelize = require('sequelize')
-const { sequelize } = require('../db')
+const Sequelize = require('sequelize');
+const { sequelize } = require('../db');
+const Usuarios = require('./Usuarios');
 
 const Vaga = sequelize.define('vaga', {
     id: {
@@ -25,17 +26,18 @@ const Vaga = sequelize.define('vaga', {
         references: {
             model: 'usuarios',
             key: 'id'
-        },
+        }
     },
-    id_apartamento: { // null se for PRAE ou MANUTENÇÂO
+    id_apartamento: {
         type: Sequelize.INTEGER,
         onDelete: 'cascade',
         references: {
             model: 'apartamentos',
             key: 'id'
-        },
+        }
     }
-})
-console.log('Carregou [Vagas.js]')
+});
+
+console.log('Carregou [Vagas.js]');
 
 module.exports = Vaga;

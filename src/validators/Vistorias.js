@@ -35,9 +35,9 @@ exports.buscarVistoria = [
     .bail(),
 
     async (req, res, next) => {
-        const errors = await validationResult(req)
-        if (!errors.isEmpty()) return res.status(400).send(errors.array()[0].msg)		
-        next()
+      const errors = await validationResult(req)
+      if (!errors.isEmpty()) return res.status(400).send(errors.array()[0].msg)		
+      next()
     },
 ]
 
@@ -49,9 +49,9 @@ exports.apagarVistoria = [
     .bail(),
 
     async (req, res, next) => {
-        const errors = await validationResult(req)
-        if (!errors.isEmpty()) return res.status(400).send(errors.array()[0].msg)		
-        next()
+      const errors = await validationResult(req)
+      if (!errors.isEmpty()) return res.status(400).send(errors.array()[0].msg)		
+      next()
     },
 ]
 
@@ -59,22 +59,22 @@ exports.atualizarVistoria = [
     check('id')
       .not()
       .isEmpty()
-      .withMessage('patrimônio não informado')
+      .withMessage('Vistoria não informada')
       .bail(),
-    check('data')
+    check('dt_vistoria')
       .not()
       .isEmpty()
       .withMessage('Data da vistoria não informada')
       .bail(),
-    check('hora')
+    check('hora_vistoria')
       .not()
       .isEmpty()
       .withMessage('Hora da vistoria não informada')
       .bail(),
 
     async (req, res, next) => {
-        const errors = await validationResult(req)
-        if (!errors.isEmpty()) return res.status(400).send(errors.array()[0].msg)		
-        next()
+      const errors = await validationResult(req)
+      if (!errors.isEmpty()) return res.status(400).send(errors.array()[0].msg)		
+      next()
     },
 ]
