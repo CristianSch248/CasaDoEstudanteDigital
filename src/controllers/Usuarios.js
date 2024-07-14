@@ -98,6 +98,7 @@ async function fetchUserData(req, res){
 async function login(req, res){
     try {
         let body = req.body
+        console.log("🚀 ~ login ~ body:", body)
         const result = await Usuarios.login(body)
         sendResponse(res, result)
     } catch (error) {

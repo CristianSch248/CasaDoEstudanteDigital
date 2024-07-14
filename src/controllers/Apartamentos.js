@@ -35,22 +35,26 @@ async function buscarVagas(req, res){
 }
 
 async function MeuApartamento(req, res){
+    console.log("🚀 ~ MeuApartamento ~ req:", req.headers)
     try {        
-        const authHeader = req.headers.authorization
+        const authHeader = req.headers['x-access-token']
+        console.log("🚀 ~ authHeader:", authHeader) // Adicionei este log para verificar se o token está sendo enviado
         if (!authHeader) return res.status(401).send('Token de autorização não fornecido')
         
-        const token = authHeader.split(' ')[1]
+        const token = authHeader;
         if (!token) return res.status(401).send('Token de autorização malformado')
 
         const decoded = jwt.Decode(token);
+        console.log("🚀 ~ decoded:", decoded) // Adicionei este log para verificar se o token está sendo decodificado corretamente
 
         const result = await Apartamentos.MeuApartamento(decoded.id)
         sendResponse(res, result)
     } catch (error){
-        console.log("buscarVagas ~ error:", error)
-        return res.status(400).send('Erro ao buscar Vagas')
+        console.log("MeuApartamento ~ error:", error)
+        return res.status(400).send('Erro ao buscar informações do apartamento')
     }
 }
+
 
 async function buscarApartamento(req, res){
     try {        

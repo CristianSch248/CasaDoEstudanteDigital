@@ -5,7 +5,7 @@ const controller = require('../controllers/Usuarios')
 const jwt = require('../js/jwt')
 
 routes.post('/auth', validators.login, controller.login)
-routes.post('/logout', jwt.verifyJWT, validators.logout, controller.logout)
+routes.post('/logout', validators.logout, controller.logout)
 routes.post('/usuario/new', validators.novoUsuario, controller.novoUsuario)
 
 routes.get('/usuario/', validators.getUser, controller.getUser)

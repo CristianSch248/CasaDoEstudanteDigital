@@ -77,6 +77,7 @@ async function apagarManutencao(id){
 }
 
 async function atualizarManutencao(body){
+    console.log("🚀 ~ atualizarManutencao ~ body:", body)
     const t = await sequelize.transaction()
 
     try{

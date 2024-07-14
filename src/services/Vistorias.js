@@ -90,13 +90,13 @@ async function atualizarVistoria(body){
     
         await Vistoria.save({transaction: t})
         await t.commit()
-        console.log('(log) - Apartamento alterado com sucesso')
+        console.log('(log) - vistoria alterado com sucesso')
         
         return { success: true, message: Vistoria } 
     } catch (error){
         console.log("error:", error)
         await t.rollback()
-        return { success: false, message: 'Erro ao editar o Apartamento'}
+        return { success: false, message: 'Erro ao editar o vistoria'}
     }
 }
 

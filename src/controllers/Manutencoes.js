@@ -3,11 +3,21 @@ const { sendResponse } = require('../js/Utils')
 const jwt = require('../js/jwt')
 
 async function novaManutencao(req, res){
+    console.log("🚀 ~ novaManutencao ~ req:", req)
     try {
-        const authHeader = req.headers.authorization
+        let authHeader = null
+        let token =  null
+
+        if(req.headers.authorization){
+            authHeader = req.headers.authorization
+            token = authHeader.split(' ')[1]
+        } else {
+            authHeader = req.headers['x-access-token']
+            token = authHeader
+        }
+        console.log("🚀 ~ novaManutencao ~ token:", token)
+
         if (!authHeader) return res.status(401).send('Token de autorização não fornecido')
-        
-        const token = authHeader.split(' ')[1]
         if (!token) return res.status(401).send('Token de autorização malformado')
 
         const decoded = jwt.Decode(token);
@@ -23,6 +33,7 @@ async function novaManutencao(req, res){
 }
 
 async function buscarManutencoes(req, res){
+    console.log("🚀 ~ buscarManutencoes ~ req:")
     try {
         const result = await Manutencoes.buscarManutencoes()
         sendResponse(res, result)
@@ -33,6 +44,7 @@ async function buscarManutencoes(req, res){
 }
 
 async function buscarManutencao(req, res){
+    console.log("🚀 ~ buscarManutencao ~ req:")
     try {
         const result = await Manutencoes.buscarManutencao(req.query.id)
         sendResponse(res, result)
@@ -43,6 +55,7 @@ async function buscarManutencao(req, res){
 }
 
 async function apagarManutencao(req, res){
+    console.log("🚀 ~ apagarManutencao ~ req:")
     try {
         const result = await Manutencoes.apagarManutencao(req.query.id)
         sendResponse(res, result)
@@ -53,6 +66,7 @@ async function apagarManutencao(req, res){
 }
 
 async function atualizarManutencao(req, res){
+    console.log("🚀 ~ atualizarManutencao ~ req:")
     try {
         let body = req.body
         const result = await Manutencoes.atualizarManutencao(body)

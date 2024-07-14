@@ -59,14 +59,14 @@ exports.atualizarVistoria = [
     check('id')
       .not()
       .isEmpty()
-      .withMessage('patrimônio não informado')
+      .withMessage('Vistoria não informada')
       .bail(),
-    check('data')
+    check('dt_vistoria')
       .not()
       .isEmpty()
       .withMessage('Data da vistoria não informada')
       .bail(),
-    check('hora')
+    check('hora_vistoria')
       .not()
       .isEmpty()
       .withMessage('Hora da vistoria não informada')

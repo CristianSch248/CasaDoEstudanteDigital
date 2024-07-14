@@ -522,6 +522,46 @@
 				}
 			}
 		},
+		"/api/ced/apartamento/vagas": {
+			"get": {
+				"tags": [ "APARTAMENTOS" ],
+				"summary": "Listar todos os apartamentos e as informações de vagas neles",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Quadro de vagas na Casa do Estudante"
+					},
+					"400": {
+						"description": "Erro ao buscar apartamentos"
+					}
+				}
+			}
+		},
+		"/api/ced/apartamento/dados": {
+			"get": {
+				"tags": [ "APARTAMENTOS" ],
+				"summary": "Listar todos os dados do apartamento",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Informações encontradas"
+					},
+					"400": {
+						"description": "Erro ao buscar as informações"
+					}
+				}
+			}
+		},
 
 		"/api/ced/patrimonio/new": {
 			"post": {
@@ -865,6 +905,332 @@
 				"responses": {
 					"200": {
 						"description": "Patrimônio apagado"
+					},
+					"400": {
+						"description": "Erro ao apagar"
+					}
+				}
+			}
+		},
+
+		"/api/ced/manutencao/new": {
+			"post": {
+				"tags": [ "MANUTENÇÃO" ],
+				"summary": "Cadastrar nova manuteção",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"requestBody": {
+					"description": "Criar nova manutenção",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"caso": {
+										"type": "string",
+										"description": "Caso da manutenção"
+									},
+									"dt_manutencao": {
+										"type": "string",
+										"description": "Data da manutenção"
+									},
+									"hora_manutencao": {
+										"type": "string",
+										"description": "Hora da manutenção"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Cadastro Efetuado"
+					},
+					"400": {
+						"description": "Erro ao cadastrar"
+					}
+				}
+			}
+		},
+		"/api/ced/manutencao/update": {
+			"put": {
+				"tags": [ "MANUTENÇÃO" ],
+				"summary": "Editar manuteção",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"requestBody": {
+					"description": "Editar manuteção existente",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+                                    "id": {
+										"type": "integer",
+										"description": "id da manuteção"
+									},
+									"caso": {
+										"type": "string",
+										"description": "Caso da manutenção"
+									},
+									"dt_manutencao": {
+										"type": "string",
+										"description": "Data da manutenção"
+									},
+									"hora_manutencao": {
+										"type": "string",
+										"description": "Hora da manutenção"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Edição feita com sucesso"
+					},
+					"400": {
+						"description": "Erro ao editar as informações"
+					}
+				}
+			}
+		},
+		"/api/ced/manutencao/all": {
+			"get": {
+				"tags": [ "MANUTENÇÃO" ],
+				"summary": "Listar todos as manuteções",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Manuteções Encontradas"
+					},
+					"400": {
+						"description": "Erro ao buscar Manuteções"
+					}
+				}
+			}
+		},
+		"/api/ced/manutencao/id": {
+			"get": {
+				"tags": [ "MANUTENÇÃO" ],
+				"summary": "Buscar manuteção por id",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "5",
+						"type": "integer",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "manuteção Encontrado"
+					},
+					"400": {
+						"description": "Erro ao buscar manuteção"
+					}
+				}
+			}
+		},
+		"/api/ced/manutencao/delete": {
+			"delete": {
+				"tags": [ "MANUTENÇÃO" ],
+				"summary": "Deletar Manuteção do Sistema",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "5",
+						"type": "integer",
+						"required": true
+					}
+                ],
+				"responses": {
+					"200": {
+						"description": "manuteção apagado"
+					},
+					"400": {
+						"description": "Erro ao apagar"
+					}
+				}
+			}
+		},
+
+		"/api/ced/vistoria/new": {
+			"post": {
+				"tags": [ "VISTORIA" ],
+				"summary": "Cadastrar novo vistoria",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"requestBody": {
+					"description": "Criar nova vistoria",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"dt_vistoria": {
+										"type": "string",
+										"description": "Data da vistoria"
+									},
+									"hora_vistoria": {
+										"type": "string",
+										"description": "Hora da vistoria"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Cadastro Efetuado"
+					},
+					"400": {
+						"description": "Erro ao cadastrar"
+					}
+				}
+			}
+		},
+		"/api/ced/vistoria/update": {
+			"put": {
+				"tags": [ "VISTORIA" ],
+				"summary": "Editar vistoria",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"requestBody": {
+					"description": "Editar vistoria existente",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+                                    "id": {
+										"type": "integer",
+										"description": "id da vistoria"
+									},
+									"dt_vistoria": {
+										"type": "string",
+										"description": "Data da vistoria"
+									},
+									"hora_vistoria": {
+										"type": "string",
+										"description": "Hora da vistoria"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Edição feita com sucesso"
+					},
+					"400": {
+						"description": "Erro ao editar as informações"
+					}
+				}
+			}
+		},
+		"/api/ced/vistoria/all": {
+			"get": {
+				"tags": [ "VISTORIA" ],
+				"summary": "Listar todas as vistorias",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "vistorias Encontrados"
+					},
+					"400": {
+						"description": "Erro ao buscar vistorias"
+					}
+				}
+			}
+		},
+		"/api/ced/vistoria/id": {
+			"get": {
+				"tags": [ "VISTORIA" ],
+				"summary": "Buscar vistoria por id",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "5",
+						"type": "integer",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "vistoria Encontrado"
+					},
+					"400": {
+						"description": "Erro ao buscar vistoria"
+					}
+				}
+			}
+		},
+		"/api/ced/vistoria/delete": {
+			"delete": {
+				"tags": [ "VISTORIA" ],
+				"summary": "Deletar vistoria do Sistema",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "5",
+						"type": "integer",
+						"required": true
+					}
+                ],
+				"responses": {
+					"200": {
+						"description": "vistoria apagado"
 					},
 					"400": {
 						"description": "Erro ao apagar"
