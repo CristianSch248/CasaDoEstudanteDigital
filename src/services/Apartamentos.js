@@ -107,13 +107,38 @@ async function MeuApartamento(id_user){
 }
 
 async function buscarApartamento(id){
+    let MoradoresApartamento = []
+    
     try {
-        let Apto = await Apartamentos.findOne([], [{ id : id }])
-        if (!Apto) return { success: false, message: 'Apartamento não encontrado.' }  
-        return { success: true, message: Apto}
+        let Apto = await Apartamentos.findOne([], [{ id: id }])
+        if (!Apto) return { success: false, message: 'Dados do seu apartamento não encontrados' }  
+
+        let outrasVagas = await Vagas.findAll([], [{ id_apartamento : Apto.id }, { ativo: true }])
+
+        if(outrasVagas.length > 0){
+            for(let vaga of outrasVagas){
+                let Moradores = await Usuarios.findOne(['id', 'nome', 'email', 'telefone'], [{ id: vaga.id_aluno } ])
+                MoradoresApartamento.push(Moradores)
+            }
+        }
+        
+        let PatrimoniosDoApartamento = await Patrimonios.findAll(['id', 'descricao', 'estado'], [{ id_apartamento: Apto.id }])
+        let VistoriasDoApartamento = await Vistorias.findAll(['id', 'dt_vistoria', 'hora_vistoria'], [{ id_apartamento: Apto.id }])
+        let ManutencoesDoApartamento = await Manutencoes.findAll(['id', 'caso', 'dt_manutencao', 'hora_manutencao'], [{ id_apartamento: Apto.id }])
+
+        return { 
+            success: true, 
+            message: {
+                DadosAP: Apto,
+                Moradores: MoradoresApartamento,
+                Patrimonio: PatrimoniosDoApartamento,
+                Vistorias: VistoriasDoApartamento,
+                Manutencoes: ManutencoesDoApartamento
+            } 
+        }
     } catch (error) {
-        console.log("error:", error)
-        return { success: false, message: 'Erro ao buscar Apartamento.'}
+        console.log('error:', error)
+        return { success: false, message: 'Houve um problema ao consultar informações do apartamento!'}
     }
 }
 
