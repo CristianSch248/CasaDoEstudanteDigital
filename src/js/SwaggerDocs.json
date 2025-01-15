@@ -1,0 +1,1260 @@
+{
+	"openapi": "3.0.1",
+	"info": {
+		"title": "Casa do Estudante Digital",
+		"description": "API CASA DO ESTUDANTE DIGITAL",
+		"version": "1.0"
+	},
+	"paths": {
+		"/api/ced/auth": {
+			"post": {
+				"tags": [ "LOGIN" ],
+				"summary": "Login",
+				"requestBody": {
+					"description": "Rota para login na Plataforma",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"email": {
+										"type": "string",
+										"description": "Usuário"
+									},
+									"senha": {
+										"type": "string",
+										"description": "Senha"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Login Efetuado"
+					},
+					"400": {
+						"description": "Erro"
+					}
+				}
+			}
+		},
+		"/api/ced/logout": {
+			"post": {
+				"tags": [ "LOGOUT" ],
+				"summary": "Logout",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"responses": {
+					"200": {
+						"description": "Tchau, Tchau!"
+					},
+					"400": {
+						"description": "Não vai sair, não!"
+					}
+				}
+			}
+		},
+
+        "/api/ced/usuario/new": {
+			"post": {
+				"tags": [ "USUARIOS" ],
+				"summary": "Cadastrar novo usuário",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"requestBody": {
+					"description": "Criar novo usuário",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"nome": {
+										"type": "string",
+										"description": "Fulano Siclano"
+									},
+									"email": {
+										"type": "string",
+										"description": "Fulano@gmail.com"
+									},
+									"senha": {
+										"type": "string",
+										"description": "ASenhaDoFulano"
+									},
+									"tipo": {
+										"type": "integer",
+										"description": "1 - aluno, 2 - prae, 3 - manutenção"
+									},
+									"telefone": {
+										"type": "string",
+										"description": "12345678901"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Cadastro Efetuado"
+					},
+					"400": {
+						"description": "Erro ao cadastrar"
+					}
+				}
+			}
+		},
+        "/api/ced/usuario/": {
+			"get": {
+				"tags": [ "USUARIOS" ],
+				"summary": "Buscar usuário por id",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "5",
+						"type": "integer",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Usuario Encontrado"
+					},
+					"400": {
+						"description": "Erro ao buscar usuários"
+					}
+				}
+			}
+		},
+        "/api/ced/usuario/listarportipo": {
+			"get": {
+				"tags": [ "USUARIOS" ],
+				"summary": "Listar Usuários por tipo",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "tipo",
+						"in": "query",
+						"description": "1 - aluno, 2 - prae, 3 - manutenção",
+						"type": "integer",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Usuarios Encontrados"
+					},
+					"400": {
+						"description": "Erro ao buscar usuários"
+					}
+				}
+			}
+		},
+        "/api/ced/usuario/editar": {
+			"put": {
+				"tags": [ "USUARIOS" ],
+				"summary": "Editar usuário",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"requestBody": {
+					"description": "Editar usuário existente",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+                                    "id": {
+										"type": "integer",
+										"description": "id do usuários"
+									},
+									"nome": {
+										"type": "string",
+										"description": "Fulano Siclano"
+									},
+									"email": {
+										"type": "string",
+										"description": "Fulano@gmail.com"
+									},
+									"senha": {
+										"type": "string",
+										"description": "ASenhaDoFulano"
+									},
+									"tipo": {
+										"type": "integer",
+										"description": "1 - aluno, 2 - prae, 3 - manutenção"
+									},
+									"telefone": {
+										"type": "string",
+										"description": "12345678901"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Edição feita com sucesso"
+					},
+					"400": {
+						"description": "Erro ao editar as informações"
+					}
+				}
+			}
+		},
+		"/api/ced/user/data": {
+			"get": {
+				"tags": [ "USUARIOS" ],
+				"summary": "Busca dados do usuário logado",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Usuario Encontrado"
+					},
+					"400": {
+						"description": "Erro ao buscar usuário"
+					}
+				}
+			}
+		},
+        "/api/ced/usuario/alterar/senha": {
+			"put": {
+				"tags": [ "USUARIOS" ],
+				"summary": "Editar senha do usuário",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"requestBody": {
+					"description": "Editar senha do usuário existente",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+                                    "id": {
+										"type": "integer",
+										"description": "id do usuários"
+									},
+									"senha": {
+										"type": "string",
+										"description": "ASenhaDoFulano"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Senha Alterada"
+					},
+					"400": {
+						"description": "Erro ao Alterar Senha"
+					}
+				}
+			}
+		},
+        "/api/ced/usuario/desativar": {
+			"patch": {
+				"tags": [ "USUARIOS" ],
+				"summary": "Desetivar Usuário do Sistema",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"requestBody": {
+					"description": "Id do Usuário a ser Desativado",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+                                    "id": {
+										"type": "integer",
+										"description": "id do usuários"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Cadastro Efetuado"
+					},
+					"400": {
+						"description": "Erro ao cadastrar"
+					}
+				}
+			}
+		},
+        "/api/ced/usuario/ativar": {
+			"patch": {
+				"tags": [ "USUARIOS" ],
+				"summary": "Ativar Usuário no Sistema",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"requestBody": {
+					"description": "Id do Usuário a ser Ativado",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+                                    "id": {
+										"type": "integer",
+										"description": "id do usuários"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Cadastro Efetuado"
+					},
+					"400": {
+						"description": "Erro ao cadastrar"
+					}
+				}
+			}
+		},
+
+		"/api/ced/apartamento/new": {
+			"post": {
+				"tags": [ "APARTAMENTOS" ],
+				"summary": "Cadastrar novo apartamento",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"requestBody": {
+					"description": "Criar novo apartamento",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"bloco": {
+										"type": "integer",
+										"description": "63"
+									},
+									"numero": {
+										"type": "integer",
+										"description": "6320"
+									},
+									"vagas": {
+										"type": "integer",
+										"description": "8"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Cadastro Efetuado"
+					},
+					"400": {
+						"description": "Erro ao cadastrar"
+					}
+				}
+			}
+		},
+		"/api/ced/apartamento/update": {
+			"put": {
+				"tags": [ "APARTAMENTOS" ],
+				"summary": "Editar apartamento",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"requestBody": {
+					"description": "Editar apartamento existente",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+                                    "id": {
+										"type": "integer",
+										"description": "id do usuários"
+									},
+									"bloco": {
+										"type": "integer",
+										"description": "63"
+									},
+									"numero": {
+										"type": "stintegering",
+										"description": "6320"
+									},
+									"vagas": {
+										"type": "integer",
+										"description": "8"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Edição feita com sucesso"
+					},
+					"400": {
+						"description": "Erro ao editar as informações"
+					}
+				}
+			}
+		},
+		"/api/ced/apartamento/all": {
+			"get": {
+				"tags": [ "APARTAMENTOS" ],
+				"summary": "Listar todos os apartamentos",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "apartamentos Encontrados"
+					},
+					"400": {
+						"description": "Erro ao buscar apartamentos"
+					}
+				}
+			}
+		},
+		"/api/ced/apartamento/id": {
+			"get": {
+				"tags": [ "APARTAMENTOS" ],
+				"summary": "Buscar apartamento por id",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "5",
+						"type": "integer",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "apartamento Encontrado"
+					},
+					"400": {
+						"description": "Erro ao buscar apartamento"
+					}
+				}
+			}
+		},
+		"/api/ced/apartamento/delete": {
+			"delete": {
+				"tags": [ "APARTAMENTOS" ],
+				"summary": "Deletar apartamento do Sistema",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "5",
+						"type": "integer",
+						"required": true
+					}
+                ],
+				"responses": {
+					"200": {
+						"description": "Cadastro Efetuado"
+					},
+					"400": {
+						"description": "Erro ao cadastrar"
+					}
+				}
+			}
+		},
+		"/api/ced/apartamento/vagas": {
+			"get": {
+				"tags": [ "APARTAMENTOS" ],
+				"summary": "Listar todos os apartamentos e as informações de vagas neles",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Quadro de vagas na Casa do Estudante"
+					},
+					"400": {
+						"description": "Erro ao buscar apartamentos"
+					}
+				}
+			}
+		},
+		"/api/ced/apartamento/dados": {
+			"get": {
+				"tags": [ "APARTAMENTOS" ],
+				"summary": "Listar todos os dados do apartamento",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Informações encontradas"
+					},
+					"400": {
+						"description": "Erro ao buscar as informações"
+					}
+				}
+			}
+		},
+
+		"/api/ced/patrimonio/new": {
+			"post": {
+				"tags": [ "PATRIMÔNIOS" ],
+				"summary": "Cadastrar novo patrimônio",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"requestBody": {
+					"description": "Criar novo patrimônio",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"descricao": {
+										"type": "string",
+										"description": "Mesa azul"
+									},
+									"estado": {
+										"type": "string",
+										"description": "Novo"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Cadastro Efetuado"
+					},
+					"400": {
+						"description": "Erro ao cadastrar"
+					}
+				}
+			}
+		},
+		"/api/ced/patrimonio/update": {
+			"put": {
+				"tags": [ "PATRIMÔNIOS" ],
+				"summary": "Editar patrimônio",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"requestBody": {
+					"description": "Editar patrimônio existente",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+                                    "id": {
+										"type": "integer",
+										"description": "id do usuários"
+									},
+									"descricao": {
+										"type": "string",
+										"description": "Mesa azul"
+									},
+									"estado": {
+										"type": "string",
+										"description": "Novo"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Edição feita com sucesso"
+					},
+					"400": {
+						"description": "Erro ao editar as informações"
+					}
+				}
+			}
+		},
+		"/api/ced/patrimonio/all": {
+			"get": {
+				"tags": [ "PATRIMÔNIOS" ],
+				"summary": "Listar todos os patrimônio",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "patrimônio Encontrados"
+					},
+					"400": {
+						"description": "Erro ao buscar patrimônio"
+					}
+				}
+			}
+		},
+		"/api/ced/patrimonio/id": {
+			"get": {
+				"tags": [ "PATRIMÔNIOS" ],
+				"summary": "Buscar patrimônio por id",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "5",
+						"type": "integer",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "patrimônio Encontrado"
+					},
+					"400": {
+						"description": "Erro ao buscar patrimônio"
+					}
+				}
+			}
+		},
+		"/api/ced/patrimonio/delete": {
+			"delete": {
+				"tags": [ "PATRIMÔNIOS" ],
+				"summary": "Deletar patrimônio* do Sistema",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "5",
+						"type": "integer",
+						"required": true
+					}
+                ],
+				"responses": {
+					"200": {
+						"description": "Patrimônio apagado"
+					},
+					"400": {
+						"description": "Erro ao apagar"
+					}
+				}
+			}
+		},
+
+		"/api/ced/vaga/new": {
+			"post": {
+				"tags": [ "VAGAS" ],
+				"summary": "Cadastrar nova Vaga",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"requestBody": {
+					"description": "Criar nova Vaga",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"dt_entrada": {
+										"type": "string",
+										"description": "Data de entrada no apartamento"
+									},
+									"dt_saida": {
+										"type": "string",
+										"description": "Data de saida do apartamento"
+									},
+									"observacao": {
+										"type": "string",
+										"description": "Acabou o BSE"
+									},
+									"ativo": {
+										"type": "boolean",
+										"description": "true"
+									},
+									"id_aluno": {
+										"type": "integer",
+										"description": "12345678901"
+									},
+									"id_apartamento": {
+										"type": "integer",
+										"description": "12345678901"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Cadastro Efetuado"
+					},
+					"400": {
+						"description": "Erro ao cadastrar"
+					}
+				}
+			}
+		},
+		"/api/ced/vaga/update": {
+			"put": {
+				"tags": [ "VAGAS" ],
+				"summary": "Editar Vaga",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"requestBody": {
+					"description": "Editar Vaga existente",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+                                    "id": {
+										"type": "integer",
+										"description": "id do usuários"
+									},
+									"dt_saida": {
+										"type": "string",
+										"description": "Data de entrada no apartamento"
+									},
+									"dt_manutencao": {
+										"type": "string",
+										"description": "Data de saida do apartamento"
+									},
+									"observacao": {
+										"type": "string",
+										"description": "Acabou o BSE"
+									},
+									"ativo": {
+										"type": "boolean",
+										"description": "true"
+									},
+									"id_aluno": {
+										"type": "integer",
+										"description": "12345678901"
+									},
+									"id_apartamento": {
+										"type": "integer",
+										"description": "12345678901"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Edição feita com sucesso"
+					},
+					"400": {
+						"description": "Erro ao editar as informações"
+					}
+				}
+			}
+		},
+		"/api/ced/vaga/all": {
+			"get": {
+				"tags": [ "VAGAS" ],
+				"summary": "Listar todos as vaga",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Vaga Encontrados"
+					},
+					"400": {
+						"description": "Erro ao buscar Vaga"
+					}
+				}
+			}
+		},
+		"/api/ced/vaga/id": {
+			"get": {
+				"tags": [ "VAGAS" ],
+				"summary": "Buscar Vaga por id",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "5",
+						"type": "integer",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Vaga Encontrado"
+					},
+					"400": {
+						"description": "Erro ao buscar"
+					}
+				}
+			}
+		},
+		"/api/ced/vaga/delete": {
+			"delete": {
+				"tags": [ "VAGAS" ],
+				"summary": "Deletar Vaga do Sistema",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "5",
+						"type": "integer",
+						"required": true
+					}
+                ],
+				"responses": {
+					"200": {
+						"description": "Patrimônio apagado"
+					},
+					"400": {
+						"description": "Erro ao apagar"
+					}
+				}
+			}
+		},
+
+		"/api/ced/manutencao/new": {
+			"post": {
+				"tags": [ "MANUTENÇÃO" ],
+				"summary": "Cadastrar nova manuteção",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"requestBody": {
+					"description": "Criar nova manutenção",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"caso": {
+										"type": "string",
+										"description": "Caso da manutenção"
+									},
+									"dt_manutencao": {
+										"type": "string",
+										"description": "Data da manutenção"
+									},
+									"hora_manutencao": {
+										"type": "string",
+										"description": "Hora da manutenção"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Cadastro Efetuado"
+					},
+					"400": {
+						"description": "Erro ao cadastrar"
+					}
+				}
+			}
+		},
+		"/api/ced/manutencao/update": {
+			"put": {
+				"tags": [ "MANUTENÇÃO" ],
+				"summary": "Editar manuteção",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"requestBody": {
+					"description": "Editar manuteção existente",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+                                    "id": {
+										"type": "integer",
+										"description": "id da manuteção"
+									},
+									"caso": {
+										"type": "string",
+										"description": "Caso da manutenção"
+									},
+									"dt_manutencao": {
+										"type": "string",
+										"description": "Data da manutenção"
+									},
+									"hora_manutencao": {
+										"type": "string",
+										"description": "Hora da manutenção"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Edição feita com sucesso"
+					},
+					"400": {
+						"description": "Erro ao editar as informações"
+					}
+				}
+			}
+		},
+		"/api/ced/manutencao/all": {
+			"get": {
+				"tags": [ "MANUTENÇÃO" ],
+				"summary": "Listar todos as manuteções",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Manuteções Encontradas"
+					},
+					"400": {
+						"description": "Erro ao buscar Manuteções"
+					}
+				}
+			}
+		},
+		"/api/ced/manutencao/id": {
+			"get": {
+				"tags": [ "MANUTENÇÃO" ],
+				"summary": "Buscar manuteção por id",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "5",
+						"type": "integer",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Manuteção Encontrada"
+					},
+					"400": {
+						"description": "Erro ao buscar"
+					}
+				}
+			}
+		},
+		"/api/ced/manutencao/delete": {
+			"delete": {
+				"tags": [ "MANUTENÇÃO" ],
+				"summary": "Deletar Manuteção do Sistema",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "5",
+						"type": "integer",
+						"required": true
+					}
+                ],
+				"responses": {
+					"200": {
+						"description": "Manuteção apagada"
+					},
+					"400": {
+						"description": "Erro ao apagar"
+					}
+				}
+			}
+		},
+
+		"/api/ced/vistoria/new": {
+			"post": {
+				"tags": [ "VISTORIA" ],
+				"summary": "Cadastrar novo vistoria",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"requestBody": {
+					"description": "Criar nova vistoria",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"dt_vistoria": {
+										"type": "string",
+										"description": "Data da vistoria"
+									},
+									"hora_vistoria": {
+										"type": "string",
+										"description": "Hora da vistoria"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Cadastro Efetuado"
+					},
+					"400": {
+						"description": "Erro ao cadastrar"
+					}
+				}
+			}
+		},
+		"/api/ced/vistoria/update": {
+			"put": {
+				"tags": [ "VISTORIA" ],
+				"summary": "Editar vistoria",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+                ],
+				"requestBody": {
+					"description": "Editar vistoria existente",
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+                                    "id": {
+										"type": "integer",
+										"description": "id da vistoria"
+									},
+									"dt_vistoria": {
+										"type": "string",
+										"description": "Data da vistoria"
+									},
+									"hora_vistoria": {
+										"type": "string",
+										"description": "Hora da vistoria"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Vistoria editada"
+					},
+					"400": {
+						"description": "Erro ao editar"
+					}
+				}
+			}
+		},
+		"/api/ced/vistoria/all": {
+			"get": {
+				"tags": [ "VISTORIA" ],
+				"summary": "Listar todas as vistorias",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "vistorias Encontradas"
+					},
+					"400": {
+						"description": "Erro ao buscar vistorias"
+					}
+				}
+			}
+		},
+		"/api/ced/vistoria/id": {
+			"get": {
+				"tags": [ "VISTORIA" ],
+				"summary": "Buscar vistoria por id",
+                "parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "5",
+						"type": "integer",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "vistoria Encontrado"
+					},
+					"400": {
+						"description": "Erro ao buscar vistoria"
+					}
+				}
+			}
+		},
+		"/api/ced/vistoria/delete": {
+			"delete": {
+				"tags": [ "VISTORIA" ],
+				"summary": "Deletar vistoria do Sistema",
+				"parameters": [
+					{
+						"name": "x-access-token",
+						"$ref": "#components/parameters/x-access-token"
+					},
+					{
+						"name": "id",
+						"in": "query",
+						"description": "5",
+						"type": "integer",
+						"required": true
+					}
+                ],
+				"responses": {
+					"200": {
+						"description": "vistoria apagada"
+					},
+					"400": {
+						"description": "Erro ao apagar"
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"parameters": {
+			"x-access-token": {
+				"name": "x-access-token",
+				"in": "header",
+				"description": "Token de acesso à API",
+				"required": true,
+				"type": "string"
+			},
+			"x-access-token-not-required": {
+				"name": "x-access-token",
+				"in": "header",
+				"description": "Token de acesso à API não obrigatório",
+				"required": false,
+				"type": "string"
+			}
+		}
+	}
+}
