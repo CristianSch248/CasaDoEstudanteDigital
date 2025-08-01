@@ -45,5 +45,3 @@ Esta parte do projeto corresponde **apenas ao back-end**, responsável por forne
 - **Outros:** Dotenv para variáveis de ambiente
 
 ---
-
-## 📂 Estrutura de Pastas (Sugestão)
